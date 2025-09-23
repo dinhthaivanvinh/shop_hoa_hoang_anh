@@ -9,12 +9,12 @@ import ProductDetail from './pages/ProductDetail';
 import CartPage from './pages/CartPage';
 import Layout from './components/Layout';
 import CategoryPage from './pages/CategoryPage';
-import AdminPage from './pages/AdminPage';
 import OrderPage from './components/OrderPage';
 import AdminLogin from './pages/AdminLogin';
 import AdminHome from './pages/AdminHome';
 import { AdminProvider } from './context/AdminContext';
 import CsvUploader from './components/CsvUploader';
+import AdminOrders from './pages/AdminOrders';
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -81,6 +81,7 @@ function App() {
             <Route path="/category/:categorySlug" element={<CategoryPage addToCart={addToCart} />} />
             <Route path="/admin/import" element={<CsvUploader />} />
             <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin-orders" element={<AdminOrders />} />
             <Route path="/admin" element={<AdminHome />} />
           </Routes>
         </Layout>

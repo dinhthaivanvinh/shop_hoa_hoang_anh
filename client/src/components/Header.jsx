@@ -1,6 +1,6 @@
 // src/components/Header.jsx
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext';
 import "../style/Menu.css"
 
@@ -8,6 +8,35 @@ const Header = ({ cartCount }) => {
   const { isAdmin, setIsAdmin } = useContext(AdminContext);
   const [ showDropdown, setShowDropdown ] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef();
+  const location = useLocation();
+
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
+
 
   const handleLogout = () => {
     setIsAdmin(false);
@@ -29,16 +58,15 @@ const Header = ({ cartCount }) => {
         <Link to="/category/sinh-nhat" className="nav-link">Hoa Sinh Nhật</Link>
         <Link to="/category/tang-le" className="nav-link">Hoa Đám Tang</Link>
         {isAdmin && (
-          <div className="admin-dropdown">
-            <Link to="#" onClick={() => setShowDropdown(!showDropdown)} className="nav-link">
+          <div className="admin-dropdown" ref={dropdownRef}>
+            <Link to="#" onClick={() => setShowDropdown(prev => !prev)} className="nav-link">
               Quản trị
             </Link>
 
             {showDropdown && (
               <ul className="dropdown-menu">
                 <li><Link to="/admin/import">📤 Import sản phẩm</Link></li>
-                <li><Link to="/admin/orders">📋 Quản lý đơn hàng</Link></li>
-                <li><Link to="/admin/status">🔄 Cập nhật trạng thái</Link></li>
+                <li><Link to="/admin-orders">📋 Quản lý đơn hàng</Link></li>
                 <li><button onClick={handleLogout}>🚪 Đăng xuất</button></li>
               </ul>
             )}
