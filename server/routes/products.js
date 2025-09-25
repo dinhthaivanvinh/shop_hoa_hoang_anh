@@ -10,19 +10,37 @@ router.post('/import', upload.single('file'), importCSV);
 
 router.get('/category', validatePagination, async (req, res) => {
   try {
-    const { type = 'KhaiTruong' } = req.query;
+    const { type = 'KhaiTruong', name, minPrice, maxPrice } = req.query;
     const { page, limit, offset } = req.pagination;
 
-    // Truy vấn tổng số sản phẩm trước
+    // Xây dựng điều kiện lọc
+    let whereClause = 'WHERE c.name = ?';
+    const params = [type];
+
+    if (name) {
+      whereClause += ' AND p.name LIKE ?';
+      params.push(`%${name}%`);
+    }
+
+    if (minPrice) {
+      whereClause += ' AND p.price >= ?';
+      params.push(minPrice);
+    }
+
+    if (maxPrice) {
+      whereClause += ' AND p.price <= ?';
+      params.push(maxPrice);
+    }
+
+    // Truy vấn tổng số sản phẩm
     const [[{ total }]] = await db.execute(
       `SELECT COUNT(*) AS total
        FROM products p
        JOIN categories c ON p.category_id = c.id
-       WHERE c.name = ?`,
-      [type]
+       ${whereClause}`,
+      params
     );
 
-    // ✅ Fallback nếu offset vượt quá tổng
     if (offset >= total) {
       return res.json({
         products: [],
@@ -32,19 +50,19 @@ router.get('/category', validatePagination, async (req, res) => {
       });
     }
 
-    // Truy vấn sản phẩm
+    // Truy vấn sản phẩm có phân trang
     const sql = `
       SELECT 
         p.id, p.name, p.price, p.description, p.image,
         c.name AS category
       FROM products p
       JOIN categories c ON p.category_id = c.id
-      WHERE c.name = ?
+      ${whereClause}
       ORDER BY p.id ASC
       LIMIT ${limit} OFFSET ${offset}
     `;
 
-    const [rows] = await db.execute(sql, [type]);
+    const [rows] = await db.execute(sql, params);
 
     res.json({
       products: rows,
@@ -53,8 +71,8 @@ router.get('/category', validatePagination, async (req, res) => {
       totalPages: Math.ceil(total / limit)
     });
   } catch (err) {
-    console.error('🔥 Lỗi truy vấn JOIN:', err);
-    res.status(500).json({ error: 'Lỗi khi lấy sản phẩm theo loại' });
+    console.error('🔥 Lỗi truy vấn có lọc:', err);
+    res.status(500).json({ error: 'Lỗi khi lấy sản phẩm theo loại và bộ lọc' });
   }
 });
 

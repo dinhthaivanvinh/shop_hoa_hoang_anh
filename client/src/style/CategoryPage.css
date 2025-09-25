@@ -1,0 +1,37 @@
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-bar input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  flex: 1;
+  min-width: 160px;
+}
+
+.filter-bar select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  min-width: 180px;
+}
+
+.clear-filter-icon {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #f44336;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+.clear-filter-icon:hover {
+  transform: scale(1.2);
+}

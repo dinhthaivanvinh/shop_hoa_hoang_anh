@@ -56,7 +56,7 @@ const Header = ({ cartCount }) => {
         <Link to="/" className="nav-link">Trang Chủ</Link>
         <Link to="/category/khai-truong" className="nav-link">Hoa Khai Trương</Link>
         <Link to="/category/sinh-nhat" className="nav-link">Hoa Sinh Nhật</Link>
-        <Link to="/category/tang-le" className="nav-link">Hoa Đám Tang</Link>
+        <Link to="/category/tang-le" className="nav-link">Hoa Tang Lễ</Link>
         {isAdmin && (
           <div className="admin-dropdown" ref={dropdownRef}>
             <Link to="#" onClick={() => setShowDropdown(prev => !prev)} className="nav-link">
