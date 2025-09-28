@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Category, CategoryTitle } from '../data/category';
 import ProductGrid from '../components/ProductGrid';
-import axios from 'axios';
+import axiosClient from '../utils/axiosClient';
 import Pagination from '../components/Pagination';
 import '../style/CategoryPage.css'
 
@@ -55,7 +55,7 @@ const CategoryPage = ( {addToCart} ) => {
     if (minPrice) query.append('minPrice', minPrice);
     if (maxPrice) query.append('maxPrice', maxPrice);
 
-    axios
+    axiosClient
       .get(`/api/products/category?${query.toString()}`)
       .then(res => {
         setProducts(res.data.products);

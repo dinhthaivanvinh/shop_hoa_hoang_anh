@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProductGrid from '../components/ProductGrid';
 import SectionHeader from '../components/SectionHeader';
-import axios from 'axios';
+import axiosClient from '../utils/axiosClient';
 
 const Home = ({addToCart}) => {
   const [productsByCategory, setProductsByCategory] = useState({
@@ -11,7 +11,7 @@ const Home = ({addToCart}) => {
   });
 
   useEffect(() => {
-    axios.get('/api/products/home')
+    axiosClient.get('/api/products/home')
       .then(res => {
         setProductsByCategory(res.data);
       })

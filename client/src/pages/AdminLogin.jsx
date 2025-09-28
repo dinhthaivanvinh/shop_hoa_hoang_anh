@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosClient from '../utils/axiosClient';
 import { AdminContext } from '../context/AdminContext';
 import "../style/AdminLogin.css"
 
@@ -16,7 +16,7 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      const res = await axios.post('/api/login', { username, password });
+      const res = await axiosClient.post('/api/login', { username, password });
       setIsAdmin(true);
       localStorage.setItem('isAdmin', 'true');
       navigate('/admin');

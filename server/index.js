@@ -1,11 +1,18 @@
 const express = require('express');
 const cors = require('cors');
+
 const productsRoutes = require('./routes/products');
-require('dotenv').config();
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env'
+});
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 app.use('/api/products', productsRoutes);
 

@@ -103,5 +103,23 @@ router.get('/home', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [[product]] = await db.execute(
+      `SELECT p.id, p.name, p.price, p.description, p.image, c.name AS category
+       FROM products p
+       JOIN categories c ON p.category_id = c.id
+       WHERE p.id = ?`,
+      [id]
+    );
+
+    if (!product) return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
+    res.json(product);
+  } catch (err) {
+    console.error('🔥 Lỗi lấy chi tiết sản phẩm:', err);
+    res.status(500).json({ error: 'Lỗi server' });
+  }
+});
 
 module.exports = router;

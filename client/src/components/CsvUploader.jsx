@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosClient from '../utils/axiosClient';
 
 const CsvUploader = () => {
   const [file, setFile] = useState(null);
@@ -20,7 +20,7 @@ const CsvUploader = () => {
     formData.append('file', file);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/products/import', formData, {
+      const res = await axiosClient.post('http://localhost:5000/api/products/import', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStatus(`✅ Import thành công: ${res.data.count} sản phẩm`);

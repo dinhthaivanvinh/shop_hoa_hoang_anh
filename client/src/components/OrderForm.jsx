@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosClient from '../utils/axiosClient';
 import { toast } from 'react-toastify';
 
 const OrderForm = ({ cartItems, clearCart }) => {
@@ -61,7 +61,7 @@ const OrderForm = ({ cartItems, clearCart }) => {
         quantity: item.quantity
       }));
 
-      const res = await axios.post('/api/orders', {
+      const res = await axiosClient.post('/api/orders', {
         ...form,
         items
       });

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosClient from '../utils/axiosClient';
 import '../style/AdminOrders.css' // nhớ tạo file CSS này
 import { useNavigate } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext';
@@ -23,7 +23,7 @@ const AdminOrders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(`/api/orders?page=${page}&status=${statusFilter}`);
+        const res = await axiosClient.get(`/api/orders?page=${page}&status=${statusFilter}`);
         setOrders(res.data.orders);
         setTotalPages(res.data.totalPages);
       } catch (err) {
@@ -36,7 +36,7 @@ const AdminOrders = () => {
 
   const handleViewDetail = async (orderId) => {
     try {
-      const res = await axios.get(`/api/orders/${orderId}`);
+      const res = await axiosClient.get(`/api/orders/${orderId}`);
       setSelectedOrder(res.data);
     } catch (err) {
       console.error('Lỗi khi lấy chi tiết đơn hàng:', err);
@@ -45,7 +45,7 @@ const AdminOrders = () => {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`/api/orders/${orderId}/status`, { status: newStatus });
+      await axiosClient.put(`/api/orders/${orderId}/status`, { status: newStatus });
       setOrders(prev =>
         prev.map(o => (o.id === orderId ? { ...o, status: newStatus } : o))
       );

@@ -1,26 +1,40 @@
-// src/pages/ProductDetail.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import products from '../data/products';
+import '../style/ProductDetail.css'; // 👉 Tách CSS riêng cho dễ quản lý
+import Base64Image from '../components/Base64Image';
+import axiosClient from '../utils/axiosClient';
 
 const ProductDetail = ({ addToCart }) => {
   const { id } = useParams();
-  const product = products.find(p => p.id === parseInt(id));
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!product) return <h2>Sản phẩm không tồn tại.</h2>;
+  useEffect(() => {
+    axiosClient.get(`/api/products/${id}`)
+      .then(res => {
+        setProduct(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('❌ Lỗi khi lấy sản phẩm:', err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) return <p>Đang tải sản phẩm...</p>;
+  if (!product) return <h2 className="not-found">Sản phẩm không tồn tại.</h2>;
 
   return (
-    <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-      <img src={product.image} alt={product.name} style={{ width: '400px', borderRadius: '8px' }} />
-      <div>
-        <h2>{product.name}</h2>
-        <p style={{ color: '#e91e63', fontWeight: 'bold' }}>{product.price.toLocaleString()}₫</p>
-        <p>{product.description}</p>
-        <button
-          onClick={() => addToCart(product)}
-          style={{ marginTop: '12px', padding: '10px 16px', backgroundColor: '#e91e63', color: '#fff', border: 'none', borderRadius: '6px' }}
-        >
-          Thêm vào giỏ
+    <div className="product-detail-container">
+      <div className="product-image-wrapper">
+        <Base64Image base64={product.image} alt={product.name} style={{ maxWidth: '100%', borderRadius: '8px' }} />
+      </div>
+      <div className="product-info">
+        <h2 className="product-name">{product.name}</h2>
+        <p className="product-price">{product.price.toLocaleString()}₫</p>
+        <p className="product-description">{product.description}</p>
+        <button className="add-to-cart-btn" onClick={() => addToCart(product)}>
+          🛒 Thêm vào giỏ
         </button>
       </div>
     </div>
