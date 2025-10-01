@@ -3,7 +3,7 @@ const cors = require('cors');
 
 const productsRoutes = require('./routes/products');
 require('dotenv').config({
-  path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env'
+  path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.local'
 });
 
 const app = express();
