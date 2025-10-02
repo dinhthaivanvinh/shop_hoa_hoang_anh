@@ -20,7 +20,7 @@ const CsvUploader = () => {
     formData.append('file', file);
 
     try {
-      const res = await axiosClient.post('http://localhost:5000/api/products/import', formData, {
+      const res = await axiosClient.post('/api/products/import', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStatus(`✅ Import thành công: ${res.data.count} sản phẩm`);
