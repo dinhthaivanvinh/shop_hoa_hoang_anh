@@ -6,7 +6,6 @@ const { importCSV } = require('../controllers/productsController');
 const db = require('../db');
 const validatePagination = require('../middlewares/validatePagination');
 const NodeCache = require('node-cache');
-const cache = new NodeCache({ stdTTL: 300 }); // cache 5 phút
 
 router.post('/import', upload.single('file'), importCSV);
 
