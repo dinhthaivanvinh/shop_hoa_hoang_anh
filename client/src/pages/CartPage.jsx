@@ -1,6 +1,5 @@
 import React from 'react';
 import "../style/CartPage.css"
-import Base64Image from '../components/Base64Image';
 import { useNavigate } from 'react-router-dom';
 
 const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
@@ -32,8 +31,7 @@ const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
             {cartItems.map(item => (
               <div key={item.id} className="cart-row">
                 <div className="cart-product">
-                  {/* <img src={item.image} alt={item.name} className="cart-thumb" /> */}
-                  <Base64Image base64={item.image} alt={item.name} className="cart-thumb" />
+                  <img src={item.image} alt={item.name} className="cart-thumb" />
                   <span>{item.name}</span>
                 </div>
 

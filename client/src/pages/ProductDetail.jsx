@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../style/ProductDetail.css'; // 👉 Tách CSS riêng cho dễ quản lý
-import Base64Image from '../components/Base64Image';
 import axiosClient from '../utils/axiosClient';
 
 const ProductDetail = ({ addToCart }) => {
@@ -27,7 +26,7 @@ const ProductDetail = ({ addToCart }) => {
   return (
     <div className="product-detail-container">
       <div className="product-image-wrapper">
-        <Base64Image base64={product.image} alt={product.name} style={{ maxWidth: '100%', borderRadius: '8px' }} />
+        <img src={product.image} alt={product.name} style={{ maxWidth: '100%', borderRadius: '8px' }} />
       </div>
       <div className="product-info">
         <h2 className="product-name">{product.name}</h2>

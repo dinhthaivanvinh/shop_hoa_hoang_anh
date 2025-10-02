@@ -31,20 +31,9 @@ exports.importCSV = async (req, res) => {
         category_id
       });
 
-
-      // 🔁 Đọc ảnh và encode base64
-      let imageBase64 = null;
-      try {
-        const imagePath = path.resolve(p.image);
-        const imageBuffer = fs.readFileSync(imagePath);
-        imageBase64 = imageBuffer.toString('base64');
-      } catch (err) {
-        console.warn(`⚠️ Không thể đọc ảnh: ${p.image}`);
-      }
-
       await db.execute(
         'INSERT INTO products (name, price, description, image, category_id) VALUES (?, ?, ?, ?, ?)',
-        [p.name, p.price, p.description, imageBase64, category_id]
+        [p.name, p.price, p.description, p.image, category_id]
       );
     }
 

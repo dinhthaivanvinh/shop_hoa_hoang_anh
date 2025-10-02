@@ -1,13 +1,12 @@
 // src/components/ProductCard.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Base64Image from './Base64Image';
 
 const ProductCard = ({ product, addToCart }) => {
   return (
     <div style={styles.card}>
       <Link to={`/product/${product.id}`}>
-        <Base64Image base64={product.image} alt={product.name} style={{ maxWidth: '100%', borderRadius: '8px'}} />
+        <img src={product.image} alt={product.name} style={{ maxWidth: '100%', borderRadius: '8px' }} />
         <h3>{product.name}</h3>
         <p>{product.price.toLocaleString()}₫</p>
       </Link>
