@@ -5,15 +5,22 @@ const upload = multer({ dest: 'uploads/' });
 const { importCSV } = require('../controllers/productsController');
 const db = require('../db');
 const validatePagination = require('../middlewares/validatePagination');
+const NodeCache = require('node-cache');
+const cache = new NodeCache({ stdTTL: 300 }); // cache 5 phút
 
 router.post('/import', upload.single('file'), importCSV);
+
+const cache = require('../utils/cache');
 
 router.get('/category', validatePagination, async (req, res) => {
   try {
     const { type = 'KhaiTruong', name, minPrice, maxPrice } = req.query;
     const { page, limit, offset } = req.pagination;
 
-    // Xây dựng điều kiện lọc
+    const cacheKey = `category:${type}:${name || ''}:${minPrice || ''}:${maxPrice || ''}:${page}:${limit}`;
+    const cached = cache.get(cacheKey);
+    if (cached) return res.json(cached);
+
     let whereClause = 'WHERE c.name = ?';
     const params = [type];
 
@@ -32,7 +39,6 @@ router.get('/category', validatePagination, async (req, res) => {
       params.push(maxPrice);
     }
 
-    // Truy vấn tổng số sản phẩm
     const [[{ total }]] = await db.execute(
       `SELECT COUNT(*) AS total
        FROM products p
@@ -42,15 +48,16 @@ router.get('/category', validatePagination, async (req, res) => {
     );
 
     if (offset >= total) {
-      return res.json({
+      const response = {
         products: [],
         total,
         page,
         totalPages: Math.ceil(total / limit)
-      });
+      };
+      cache.set(cacheKey, response);
+      return res.json(response);
     }
 
-    // Truy vấn sản phẩm có phân trang
     const sql = `
       SELECT 
         p.id, p.name, p.price, p.description, p.image,
@@ -64,12 +71,14 @@ router.get('/category', validatePagination, async (req, res) => {
 
     const [rows] = await db.execute(sql, params);
 
-    res.json({
+    const response = {
       products: rows,
       total,
       page,
       totalPages: Math.ceil(total / limit)
-    });
+    };
+    cache.set(cacheKey, response);
+    res.json(response);
   } catch (err) {
     console.error('🔥 Lỗi truy vấn có lọc:', err);
     res.status(500).json({ error: 'Lỗi khi lấy sản phẩm theo loại và bộ lọc' });
@@ -78,6 +87,10 @@ router.get('/category', validatePagination, async (req, res) => {
 
 router.get('/home', async (req, res) => {
   try {
+    const cacheKey = 'home:products';
+    const cached = cache.get(cacheKey);
+    if (cached) return res.json(cached);
+
     const categories = ['KhaiTruong', 'SinhNhat', 'TangLe'];
     const result = {};
 
@@ -96,6 +109,7 @@ router.get('/home', async (req, res) => {
       result[type] = rows;
     }
 
+    cache.set(cacheKey, result);
     res.json(result);
   } catch (err) {
     console.error('🔥 Lỗi khi lấy sản phẩm cho trang Home:', err);
@@ -105,6 +119,10 @@ router.get('/home', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
+  const cacheKey = `product:${id}`;
+  const cached = cache.get(cacheKey);
+  if (cached) return res.json(cached);
+
   try {
     const [[product]] = await db.execute(
       `SELECT p.id, p.name, p.price, p.description, p.image, c.name AS category
@@ -115,6 +133,8 @@ router.get('/:id', async (req, res) => {
     );
 
     if (!product) return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
+
+    cache.set(cacheKey, product);
     res.json(product);
   } catch (err) {
     console.error('🔥 Lỗi lấy chi tiết sản phẩm:', err);
