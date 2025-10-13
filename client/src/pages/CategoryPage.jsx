@@ -1,7 +1,7 @@
 // src/pages/CategoryPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Category, CategoryTitle } from '../data/category';
+import { CategoryTitle } from '../data/category';
 import ProductGrid from '../components/ProductGrid';
 import axiosClient from '../utils/axiosClient';
 import Pagination from '../components/Pagination';
@@ -12,17 +12,11 @@ const CategoryPage = ( {addToCart} ) => {
   const [totalPages, setTotalPages] = useState(1);
   const [products, setProducts] = useState([]);
   const { categorySlug } = useParams();
-  const categoryMap = {
-    'sinh-nhat': Category.SinhNhat,
-    'khai-truong': Category.KhaiTruong,
-    'tang-le': Category.TangLe
-  };
   const categoryTitleMap = {
     'sinh-nhat': CategoryTitle.SinhNhat,
     'khai-truong': CategoryTitle.KhaiTruong,
     'tang-le': CategoryTitle.TangLe
   };
-  const selectedCategory = categoryMap[categorySlug];
   const selectedCategoryTitle = categoryTitleMap[categorySlug];
 
   const [searchText, setSearchText] = useState('');
@@ -32,7 +26,7 @@ const CategoryPage = ( {addToCart} ) => {
 
   useEffect(() => {
     setPage(1);
-  }, [searchText, minPrice, maxPrice]);
+  }, [searchText, minPrice, maxPrice, categorySlug]);
 
   useEffect(() => {
     // Reset filter khi chuyển category
@@ -49,7 +43,7 @@ const CategoryPage = ( {addToCart} ) => {
 
   useEffect(() => {
     const query = new URLSearchParams();
-    query.append('type', selectedCategory);
+    query.append('type', categorySlug);
     query.append('page', page);
     if (searchText) query.append('name', searchText);
     if (minPrice) query.append('minPrice', minPrice);
@@ -61,11 +55,7 @@ const CategoryPage = ( {addToCart} ) => {
         setProducts(res.data.products);
         setTotalPages(res.data.totalPages);
       });
-  }, [selectedCategory, page, searchText, minPrice, maxPrice]);
-
-  if (!selectedCategory) {
-    return <h2>❌ Loại hoa không tồn tại.</h2>;
-  }
+  }, [page, searchText, minPrice, maxPrice, categorySlug]);
 
   const title = `🌸 ${selectedCategoryTitle.replace(/([A-Z])/g, ' $1').trim()}`;
 

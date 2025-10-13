@@ -3,34 +3,45 @@ import ProductGrid from '../components/ProductGrid';
 import SectionHeader from '../components/SectionHeader';
 import axiosClient from '../utils/axiosClient';
 
-const Home = ({addToCart}) => {
-  const [productsByCategory, setProductsByCategory] = useState({
-    KhaiTruong: [],
-    SinhNhat: [],
-    TangLe: []
-  });
+const Home = ({ addToCart }) => {
+  const [productsByCategory, setProductsByCategory] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axiosClient.get('/api/products/home')
       .then(res => {
         setProductsByCategory(res.data);
+        setLoading(false);
       })
       .catch(err => {
-        console.error('❌ Lỗi khi lấy sản phẩm trang chủ:', err);
+        if (!err.response) {
+          console.error('❌ Mất kết nối tới server:', err.message);
+        } else {
+          console.error('❌ Lỗi khi lấy sản phẩm trang chủ:', err);
+        }
+
+        setLoading(false);
       });
   }, []);
 
+  if (loading) return <div className="text-center py-10">⏳ Đang tải sản phẩm...</div>;
+
   return (
-    <>
-      <SectionHeader title="🌼 Hoa Khai Trương" link="/category/khai-truong" />
-      <ProductGrid products={productsByCategory.KhaiTruong} addToCart={addToCart} />
+    <div className="bg-white">
+      {/* Banner đầu trang */}
+      <section className="bg-red-100 py-10 text-center">
+        <h2 className="text-3xl font-bold text-red-700 mb-2">Đặt hoa online – Giao tận nơi</h2>
+        <p className="text-lg text-gray-700">Hoa tươi cho mọi dịp: Khai trương, Sinh nhật, Tang lễ...</p>
+      </section>
 
-      <SectionHeader title="🎂 Hoa Sinh Nhật" link="/category/sinh-nhat" />
-      <ProductGrid products={productsByCategory.SinhNhat} addToCart={addToCart} />
-
-      <SectionHeader title="🕊️ Hoa Tang Lễ" link="/category/tang-le" />
-      <ProductGrid products={productsByCategory.TangLe} addToCart={addToCart} />
-    </>
+      {/* Render từng danh mục */}
+      {Object.entries(productsByCategory).map(([slug, { label, products }]) => (
+        <section key={slug} className="max-w-7xl mx-auto px-4 py-10">
+          <SectionHeader title={`🌸 ${label}`} link={`/category/${slug}`} />
+          <ProductGrid products={products} addToCart={addToCart} />
+        </section>
+      ))}
+    </div>
   );
 };
 

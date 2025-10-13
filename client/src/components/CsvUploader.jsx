@@ -17,18 +17,30 @@ const CsvUploader = () => {
     }
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', file); // ✅ tên field phải là 'csv'
 
     try {
       const res = await axiosClient.post('/api/products/import', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      setStatus(`✅ Import thành công: ${res.data.count} sản phẩm`);
-    } catch (err) {
-      console.error(err);
+
+    const { createdCount, warnings } = res.data;
+
+    if (createdCount > 0) {
+      setStatus(`✅ Đã import ${createdCount} sản phẩm`);
+    } else {
+      setStatus('⚠️ Không có sản phẩm nào được import');
+    }
+
+    if (warnings?.length) {
+      console.warn('⚠️ Cảnh báo khi import:', warnings);
+    }
+  } catch (err) {
+      console.error('❌ Lỗi khi import:', err.response?.data || err.message);
       setStatus('❌ Lỗi khi import sản phẩm');
     }
   };
+
 
   return (
     <div style={styles.container}>

@@ -13,9 +13,15 @@ const axiosClient = axios.create({
 axiosClient.interceptors.response.use(
   (res) => res,
   (err) => {
-    console.error('❌ API Error:', err.response?.data || err.message);
+    const status = err.response?.status;
+    const url = err.config?.url;
+    const method = err.config?.method;
+    const message = err.response?.data?.error || err.message;
+
+    console.error(`❌ [${method?.toUpperCase()} ${url}] → ${status || 'NO STATUS'}: ${message}`);
     return Promise.reject(err);
   }
 );
+
 
 export default axiosClient;

@@ -130,6 +130,7 @@ const AdminOrders = () => {
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <h3>Chi tiết đơn hàng #{selectedOrder.id}</h3>
             <p>Khách hàng: {selectedOrder.customerName}</p>
+            <p>Ghi chú: {selectedOrder.note}</p>
             <p>Ngày đặt: {formatDate(selectedOrder.createdAt)}</p>
             <p>Tổng tiền: {formatPrice(selectedOrder.totalPrice)}</p>
             <table className="order-items-table">
