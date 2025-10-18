@@ -1,0 +1,522 @@
+/* src/styles/Header.css */
+
+/* ============================================
+   HEADER STRUCTURE
+   ============================================ */
+
+.header {
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   TOP BAR
+   ============================================ */
+
+.header-top {
+  background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+  color: #fff;
+  font-size: 0.875rem;
+  padding: 8px 0;
+}
+
+.header-top-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.header-top-left,
+.header-top-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.top-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.top-info .icon {
+  font-size: 1rem;
+}
+
+.top-info a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.top-info a:hover {
+  opacity: 0.85;
+  text-decoration: underline;
+}
+
+/* ============================================
+   MAIN HEADER
+   ============================================ */
+
+.header-main {
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ============================================
+   LOGO
+   ============================================ */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  flex: 0 0 auto;
+}
+
+.logo-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logo-main {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ec4899;
+  line-height: 1.2;
+}
+
+.logo-sub {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 400;
+}
+
+/* ============================================
+   HAMBURGER MENU (MOBILE)
+   ============================================ */
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  order: -1;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background-color: #ec4899;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.hamburger:hover span {
+  background-color: #d946ef;
+}
+
+/* ============================================
+   DESKTOP NAVIGATION
+   ============================================ */
+
+.header-nav {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-link,
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.nav-link .icon {
+  font-size: 1.1rem;
+}
+
+.nav-link:hover,
+.dropdown-toggle:hover {
+  background-color: #fce7f3;
+  color: #ec4899;
+}
+
+.arrow {
+  font-size: 0.7rem;
+  margin-left: 2px;
+  transition: transform 0.3s;
+}
+
+.has-dropdown.open .arrow {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   DROPDOWN MENU
+   ============================================ */
+
+.nav-item {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 1100;
+}
+
+.dropdown-menu.open {
+  display: block;
+  animation: dropdownFade 0.3s ease;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-menu li {
+  list-style: none;
+  margin: 0;
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: #333;
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dropdown-link:hover {
+  background-color: #fce7f3;
+  color: #ec4899;
+}
+
+/* ============================================
+   CART BUTTON
+   ============================================ */
+
+.cart-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  position: relative;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+.cart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(236, 72, 153, 0.4);
+}
+
+.cart-icon {
+  font-size: 1.3rem;
+}
+
+.cart-text {
+  display: none;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #fff;
+  color: #ec4899;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   MOBILE SIDEBAR
+   ============================================ */
+
+.sidebar-backdrop {
+  display: none;
+}
+
+.sidebar-backdrop.visible {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, #fff 0%, #fdf2f8 100%);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.sidebar-menu.open {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+  color: #fff;
+}
+
+.sidebar-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.close-btn {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 8px;
+}
+
+.sidebar-link,
+.sidebar-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.sidebar-link:hover,
+.sidebar-dropdown-toggle:hover {
+  background-color: #fce7f3;
+  color: #ec4899;
+  border-color: #ec4899;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 12px;
+  margin-top: 4px;
+}
+
+.sidebar-dropdown li {
+  list-style: none;
+}
+
+.sidebar-sublink {
+  display: block;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  color: #555;
+  text-decoration: none;
+  background: #f9fafb;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.sidebar-sublink:hover {
+  background-color: #fce7f3;
+  color: #ec4899;
+}
+
+.sidebar-dropdown-toggle .arrow {
+  font-size: 0.8rem;
+  transition: transform 0.3s;
+}
+
+.sidebar-dropdown-toggle .arrow.open {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   RESPONSIVE - TABLET AND UP
+   ============================================ */
+
+@media (min-width: 768px) {
+  .header-top-container {
+    padding: 0 24px;
+  }
+
+  .header-container {
+    padding: 16px 24px;
+  }
+
+  .logo-main {
+    font-size: 1.75rem;
+  }
+
+  .logo-sub {
+    font-size: 0.85rem;
+  }
+
+  .cart-text {
+    display: inline;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - DESKTOP
+   ============================================ */
+
+@media (min-width: 1024px) {
+  .hamburger {
+    display: none;
+  }
+
+  .header-nav {
+    display: flex;
+  }
+
+  .sidebar-menu,
+  .sidebar-backdrop {
+    display: none !important;
+  }
+
+  .header-container {
+    gap: 24px;
+  }
+
+  .logo-icon {
+    font-size: 3rem;
+  }
+
+  .logo-main {
+    font-size: 2rem;
+  }
+
+  .nav-link,
+  .dropdown-toggle {
+    padding: 12px 18px;
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - WIDE DESKTOP
+   ============================================ */
+
+@media (min-width: 1280px) {
+  .header-top-container,
+  .header-container {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}

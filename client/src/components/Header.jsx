@@ -2,41 +2,47 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext';
-import "../style/Menu.css"
+import '../style/Header.css';
 
-const Header = ({ cartCount }) => {
+const Header = ({ cartCount = 0 }) => {
   const { isAdmin, setIsAdmin } = useContext(AdminContext);
-  const [ showDropdown, setShowDropdown ] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef();
+  const categoryRef = useRef();
   const location = useLocation();
 
   useEffect(() => {
-    setShowDropdown(false);
+    setMenuOpen(false);
+    setSubmenuOpen(false);
+    setCategoryMenuOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowDropdown(false);
+        setSubmenuOpen(false);
+      }
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
+        setCategoryMenuOpen(false);
       }
     };
-
-    const handleEscape = (e) => {
+    const handleKey = (e) => {
       if (e.key === 'Escape') {
-        setShowDropdown(false);
+        setMenuOpen(false);
+        setSubmenuOpen(false);
+        setCategoryMenuOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-
+    document.addEventListener('keydown', handleKey);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleKey);
     };
   }, []);
-
 
   const handleLogout = () => {
     setIsAdmin(false);
@@ -45,99 +51,222 @@ const Header = ({ cartCount }) => {
   };
 
   return (
-    <header style={styles.header}>
-      {/* Logo */}
-      <div style={styles.logo}>
-        <h2>🌸 Hoàng Anh</h2>
+    <header className="header">
+      {/* Top Bar */}
+      <div className="header-top">
+        <div className="header-top-container">
+          <div className="header-top-left">
+            <span className="top-info">
+              <span className="icon">📧</span>
+              <a href="mailto:shophoahoanganh@gmail.com">shophoahoanganh@gmail.com</a>
+            </span>
+          </div>
+          <div className="header-top-right">
+            <span className="top-info">
+              <span className="icon">📞</span>
+              <a href="tel:0123456789">Hotline: 0123 456 789</a>
+            </span>
+          </div>
+        </div>
       </div>
 
-      {/* Menu */}
-      <nav style={styles.nav}>
-        <Link to="/" className="nav-link">Trang Chủ</Link>
-        <Link to="/category/khai-truong" className="nav-link">Hoa Khai Trương</Link>
-        <Link to="/category/sinh-nhat" className="nav-link">Hoa Sinh Nhật</Link>
-        <Link to="/category/tang-le" className="nav-link">Hoa Tang Lễ</Link>
-        {isAdmin && (
-          <div className="admin-dropdown" ref={dropdownRef}>
-            <Link to="#" onClick={() => setShowDropdown(prev => !prev)} className="nav-link">
-              Quản trị
+      {/* Main Header */}
+      <div className="header-main">
+        <div className="header-container">
+          {/* Mobile hamburger */}
+          <button
+            aria-label="Open menu"
+            className="hamburger"
+            onClick={() => setMenuOpen(true)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
+          {/* Logo */}
+          <Link to="/" className="logo">
+            <span className="logo-icon">🌸</span>
+            <span className="logo-text">
+              <span className="logo-main">Shop Hoa Hoàng Anh</span>
+              <span className="logo-sub">Tươi đẹp mỗi ngày</span>
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="header-nav" role="navigation" aria-label="Primary">
+            <Link to="/" className="nav-link">
+              <span className="icon">🏠</span>
+              Trang Chủ
             </Link>
 
-            {showDropdown && (
-              <ul className="dropdown-menu">
-                <li><Link to="/admin/import">📤 Import sản phẩm</Link></li>
-                <li><Link to="/admin-orders">📋 Quản lý đơn hàng</Link></li>
-                <li><button onClick={handleLogout}>🚪 Đăng xuất</button></li>
+            {/* Dropdown Danh mục */}
+            <div
+              className={`nav-item has-dropdown ${categoryMenuOpen ? 'open' : ''}`}
+              ref={categoryRef}
+            >
+              <button
+                className="nav-link dropdown-toggle"
+                aria-expanded={categoryMenuOpen}
+                onClick={() => setCategoryMenuOpen(prev => !prev)}
+              >
+                <span className="icon">🌺</span>
+                Danh Mục Hoa
+                <span className="arrow">▾</span>
+              </button>
+
+              <ul className={`dropdown-menu ${categoryMenuOpen ? 'open' : ''}`}>
+                <li>
+                  <Link to="/category/khai-truong" className="dropdown-link">
+                    🎉 Hoa Khai Trương
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/category/sinh-nhat" className="dropdown-link">
+                    🎂 Hoa Sinh Nhật
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/category/tang-le" className="dropdown-link">
+                    🕯️ Hoa Tang Lễ
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {isAdmin && (
+              <div
+                className={`nav-item has-dropdown ${submenuOpen ? 'open' : ''}`}
+                ref={dropdownRef}
+              >
+                <button
+                  className="nav-link dropdown-toggle"
+                  aria-expanded={submenuOpen}
+                  onClick={() => setSubmenuOpen(prev => !prev)}
+                >
+                  <span className="icon">⚙️</span>
+                  Quản Trị
+                  <span className="arrow">▾</span>
+                </button>
+
+                <ul className={`dropdown-menu ${submenuOpen ? 'open' : ''}`}>
+                  <li>
+                    <Link to="/admin/import" className="dropdown-link">
+                      📤 Import sản phẩm
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin-orders" className="dropdown-link">
+                      📋 Quản lý đơn hàng
+                    </Link>
+                  </li>
+                  <li>
+                    <button className="dropdown-link" onClick={handleLogout}>
+                      🚪 Đăng xuất
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+
+            <Link to="/contact" className="nav-link">
+              <span className="icon">📞</span>
+              Liên Hệ
+            </Link>
+          </nav>
+
+          {/* Cart */}
+          <Link to="/cart" className="cart-btn">
+            <span className="cart-icon">🛒</span>
+            <span className="cart-text">Giỏ hàng</span>
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+          </Link>
+        </div>
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div className={`sidebar-backdrop ${menuOpen ? 'visible' : ''}`} onClick={() => setMenuOpen(false)} />
+
+      <aside className={`sidebar-menu ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
+        <div className="sidebar-header">
+          <span className="sidebar-logo">🌸 Hoàng Anh</span>
+          <button className="close-btn" aria-label="Close menu" onClick={() => setMenuOpen(false)}>
+            ✕
+          </button>
+        </div>
+
+        <nav className="sidebar-nav" aria-label="Mobile">
+          <Link to="/" className="sidebar-link" onClick={() => setMenuOpen(false)}>
+            🏠 Trang Chủ
+          </Link>
+
+          <div className="sidebar-section">
+            <button
+              className="sidebar-link sidebar-dropdown-toggle"
+              onClick={() => setCategoryMenuOpen(prev => !prev)}
+            >
+              🌺 Danh Mục Hoa
+              <span className={`arrow ${categoryMenuOpen ? 'open' : ''}`}>▾</span>
+            </button>
+            {categoryMenuOpen && (
+              <ul className="sidebar-dropdown">
+                <li>
+                  <Link to="/category/khai-truong" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                    🎉 Hoa Khai Trương
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/category/sinh-nhat" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                    🎂 Hoa Sinh Nhật
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/category/tang-le" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                    🕯️ Hoa Tang Lễ
+                  </Link>
+                </li>
               </ul>
             )}
           </div>
-        )}
-        <a href="#">Liên Hệ</a>
-      </nav>
 
-      {/* Hotline & Zalo */}
-      <div style={styles.contact}>
-        <p>📞 086 223 1477</p>
-        <a href="https://zalo.me/0862231477" target="_blank" rel="noopener noreferrer">
-          💬 Zalo Chat
-        </a>
-        <Link to="/cart">
-        🛒 Giỏ hàng ({cartCount})
-        </Link>
-      </div>
+          {isAdmin && (
+            <div className="sidebar-section">
+              <button
+                className="sidebar-link sidebar-dropdown-toggle"
+                onClick={() => setSubmenuOpen(prev => !prev)}
+              >
+                ⚙️ Quản Trị
+                <span className={`arrow ${submenuOpen ? 'open' : ''}`}>▾</span>
+              </button>
+              {submenuOpen && (
+                <ul className="sidebar-dropdown">
+                  <li>
+                    <Link to="/admin/import" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                      📤 Import sản phẩm
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin-orders" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                      📋 Quản lý đơn hàng
+                    </Link>
+                  </li>
+                  <li>
+                    <button className="sidebar-sublink" onClick={() => { setMenuOpen(false); handleLogout(); }}>
+                      🚪 Đăng xuất
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
+
+          <Link to="/contact" className="sidebar-link" onClick={() => setMenuOpen(false)}>
+            📞 Liên Hệ
+          </Link>
+        </nav>
+      </aside>
     </header>
   );
-};
-
-const styles = {
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '12px 24px',
-    backgroundColor: '#fff0f5',
-    borderBottom: '1px solid #ddd',
-    flexWrap: 'wrap',
-    position: 'relative'
-  },
-  logo: {
-    fontWeight: 'bold',
-    fontSize: '20px',
-    color: '#e91e63'
-  },
-  nav: {
-    display: 'flex',
-    gap: '16px',
-    alignItems: 'center',
-    position: 'relative'
-  },
-  dropdown: {
-    position: 'relative',
-    cursor: 'pointer'
-  },
-  dropdownToggle: {
-    fontWeight: 'bold'
-  },
-  dropdownMenu: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    backgroundColor: '#fff',
-    border: '1px solid #ddd',
-    padding: '8px',
-    zIndex: 1000,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px'
-  },
-  contact: {
-    textAlign: 'right',
-    fontSize: '14px',
-    color: '#333',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end'
-  }
 };
 
 export default Header;

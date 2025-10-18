@@ -1,0 +1,27 @@
+/* src/styles/layout.css */
+
+.main {
+  padding: 20px 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 12px;
+  }
+}
+
+.footer {
+  text-align: center;
+  padding: 12px;
+  background-color: #fff0f5;
+  color: #555;
+  font-size: 0.9rem;
+}

@@ -15,6 +15,7 @@ import AdminHome from './pages/AdminHome';
 import { AdminProvider } from './context/AdminContext';
 import CsvUploader from './components/CsvUploader';
 import AdminOrders from './pages/AdminOrders';
+import { FilterProvider } from './context/FilterContext';
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -68,26 +69,26 @@ function App() {
   };
 
   return (
-    <AdminProvider>
-
-      <Router>
-        <Layout cartCount={cartItems.length}>
-          <Routes>
-            <Route path="/order" element={<OrderPage cartItems={cartItems} clearCart={clearCart}/>} />
-            
-            <Route path="/" element={<Home addToCart={addToCart} />} />
-            <Route path="/product/:id" element={<ProductDetail addToCart={addToCart} />} />
-            <Route path="/cart" element={<CartPage cartItems={cartItems} updateQuantity={updateQuantity} removeFromCart={removeFromCart} clearCart={clearCart} />} />
-            <Route path="/category/:categorySlug" element={<CategoryPage addToCart={addToCart} />} />
-            <Route path="/admin/import" element={<CsvUploader />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
-            <Route path="/admin-orders" element={<AdminOrders />} />
-            <Route path="/admin" element={<AdminHome />} />
-          </Routes>
-        </Layout>
-        <ToastContainer />
-      </Router>
-    </AdminProvider>
+    <FilterProvider>
+      <AdminProvider>
+        <Router>
+          <Layout cartCount={cartItems.length}>
+            <Routes>
+              <Route path="/order" element={<OrderPage cartItems={cartItems} clearCart={clearCart} />} />
+              <Route path="/" element={<Home addToCart={addToCart} />} />
+              <Route path="/product/:id" element={<ProductDetail addToCart={addToCart} />} />
+              <Route path="/cart" element={<CartPage cartItems={cartItems} updateQuantity={updateQuantity} removeFromCart={removeFromCart} clearCart={clearCart} />} />
+              <Route path="/category/:categorySlug" element={<CategoryPage addToCart={addToCart} />} />
+              <Route path="/admin/import" element={<CsvUploader />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
+              <Route path="/admin-orders" element={<AdminOrders />} />
+              <Route path="/admin" element={<AdminHome />} />
+            </Routes>
+          </Layout>
+          <ToastContainer />
+        </Router>
+      </AdminProvider>
+    </FilterProvider>
   );
 }
 

@@ -1,0 +1,120 @@
+/* src/styles/filterbar.css */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.filter-bar input {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  flex: 1 1 100%;
+  background-color: #fff;
+}
+
+/* Custom select */
+.custom-select {
+  position: relative;
+  flex: 1 1 100%;
+}
+
+.select-toggle {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.select-options li {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.select-options li:hover {
+  background-color: #f0f0f0;
+}
+
+.clear-filter-icon {
+  font-size: 1.4rem;
+  padding: 8px;
+  color: #d53f8c;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .select-toggle,
+  .filter-bar input {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .select-options li {
+    font-size: 1rem;
+  }
+
+  .clear-filter-icon {
+    align-self: flex-end;
+  }
+}
+
+/* Desktop layout */
+@media (min-width: 900px) {
+  .filter-bar {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .filter-bar input {
+    flex: 1 1 300px;
+    font-size: 1rem;
+    padding: 10px 14px;
+  }
+
+  .custom-select {
+    flex: 0 0 240px;
+  }
+
+  .select-toggle {
+    font-size: 1rem;
+    padding: 10px 14px;
+  }
+
+  .clear-filter-icon {
+    font-size: 1.4rem;
+    margin-left: auto;
+  }
+}

@@ -121,8 +121,6 @@ router.get('/home', async (req, res) => {
     }));
 
     // cache.set(cacheKey, result);
-    console.log('🚀 Trả về kết quả:', result);
-
 
     res.json(result);
 
@@ -268,7 +266,6 @@ router.get('/category', async (req, res) => {
     const normalizedType = slugify(type, { lower: true });
 
     const [categories] = await db.execute('SELECT id, name FROM categories');
-    console.log('📦 Danh mục:', categories.map(c => slugify(c.name, { lower: true })));
 
     const matched = categories.find(c => slugify(c.name, { lower: true }) === normalizedType);
     if (!matched) {

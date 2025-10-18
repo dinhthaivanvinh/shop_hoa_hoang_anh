@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 console.log('process.env.NODE_ENV ', process.env.NODE_ENV);
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 require('dotenv').config({
   path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.local'
 });

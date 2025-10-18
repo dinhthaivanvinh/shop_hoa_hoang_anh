@@ -1,61 +1,133 @@
-// src/components/ProductCard.jsx
-import React from 'react';
+// src/components/ProductCard.jsx (Alternative version with custom hook)
+import React, { useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useAddToCart } from '../hooks/useAddToCart';
+import '../style/ProductCard.css';
 
-const ProductCard = ({ product, addToCart }) => {
-  return (
-    <div style={styles.card}>
-      <Link to={`/product/${product.id}`}>
-        <img src={product.image} alt={product.name} style={{ maxWidth: '100%', borderRadius: '8px' }} />
-        <h3>{product.name}</h3>
-        <p>{product.price.toLocaleString()}₫</p>
-      </Link>
-      <button
-          onClick={() => addToCart(product)}
-          style={styles.addToCartButton}
-        >
-          Thêm vào giỏ
-        </button>
-    </div>
-  );
+// Constants
+const DESCRIPTION_MAX_LENGTH = 50;
+
+// Utility functions
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(price);
 };
 
-const styles = {
-  card: {
-    padding: '16px',
-    border: '1px solid #eee',
-    borderRadius: '8px',
-    backgroundColor: '#fff',
-    boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '8px'
-  },
-  image: {
-    width: '100%',
-    height: 'auto',
-    borderRadius: '6px'
-  },
-  button: {
-    marginTop: '10px',
-    padding: '8px 12px',
-    backgroundColor: '#e91e63',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer'
-  },
-  addToCartButton: {
-    backgroundColor: '#e91e63',
-    color: '#fff',
-    padding: '8px 12px',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '14px',
-    cursor: 'pointer',
-    marginTop: '8px'
-  }
+const truncateText = (text, maxLength) => {
+  if (!text) return '';
+  return text.length > maxLength
+    ? `${text.substring(0, maxLength)}...`
+    : text;
+};
+
+const ProductCard = ({ product, addToCart }) => {
+  const [imageError, setImageError] = useState(false);
+  const { isAdding, handleAddToCart } = useAddToCart(addToCart);
+
+  // Memoized values
+  const hasDiscount = useMemo(() =>
+    product.originalPrice && product.originalPrice > product.price,
+    [product.originalPrice, product.price]
+  );
+
+  const truncatedDescription = useMemo(() =>
+    truncateText(product.description, DESCRIPTION_MAX_LENGTH),
+    [product.description]
+  );
+
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
+
+  const onAddToCart = useCallback((e) => {
+    handleAddToCart(product, e);
+  }, [handleAddToCart, product]);
+
+  return (
+    <article className="product-card">
+      <Link
+        to={`/product/${product.id}`}
+        className="product-card-link"
+        aria-label={`Xem chi tiết ${product.name}`}
+      >
+        {/* Product Image */}
+        <div className="product-image-wrapper">
+          {imageError ? (
+            <div className="product-image-placeholder">
+              <span className="placeholder-icon">🌸</span>
+              <span className="placeholder-text">Hình ảnh không khả dụng</span>
+            </div>
+          ) : (
+            <img
+              src={product.image || '/placeholder-flower.jpg'}
+              alt={product.name}
+              className="product-image"
+              onError={handleImageError}
+              loading="lazy"
+            />
+          )}
+
+          {/* Badges */}
+          {product.isNew && (
+            <span className="product-badge badge-new">Mới</span>
+          )}
+          {product.discount && (
+            <span className="product-badge badge-sale">-{product.discount}%</span>
+          )}
+        </div>
+
+        {/* Product Info */}
+        <div className="product-info">
+          <h3 className="product-name" title={product.name}>
+            {product.name}
+          </h3>
+
+          {product.description && (
+            <p className="product-description">
+              {truncatedDescription}
+            </p>
+          )}
+        </div>
+      </Link>
+
+      {/* Product Footer - Outside Link */}
+      <div className="product-footer">
+        <div className="product-price-wrapper">
+          {hasDiscount ? (
+            <>
+              <span className="product-price-original">
+                {formatPrice(product.originalPrice)}
+              </span>
+              <span className="product-price">{formatPrice(product.price)}</span>
+            </>
+          ) : (
+            <span className="product-price">{formatPrice(product.price)}</span>
+          )}
+        </div>
+
+        <button
+          className={`add-to-cart-btn ${isAdding ? 'adding' : ''}`}
+          onClick={onAddToCart}
+          disabled={isAdding}
+          aria-label={`Thêm ${product.name} vào giỏ hàng`}
+        >
+          {isAdding ? (
+            <>
+              <span className="btn-icon">✓</span>
+              <span className="btn-text">Đã thêm</span>
+            </>
+          ) : (
+            <>
+              <span className="btn-icon">🛒</span>
+              <span className="btn-text">Thêm</span>
+            </>
+          )}
+        </button>
+      </div>
+    </article>
+  );
 };
 
 export default ProductCard;
