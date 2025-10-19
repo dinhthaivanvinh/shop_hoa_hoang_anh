@@ -3,16 +3,18 @@ import React, { useEffect, useState } from 'react';
 import ProductGrid from '../components/ProductGrid';
 import SectionHeader from '../components/SectionHeader';
 import HeroSlider from '../components/HeroSlider';
+import FilterBar from '../components/FilterBar';
 import axiosClient from '../utils/axiosClient';
 import { useFilter } from '../context/FilterContext';
 import '../style/Home.css';
 
 const Home = ({ addToCart }) => {
-  const { filters } = useFilter();
+  const { filters, setFilters } = useFilter();
   const [rawData, setRawData] = useState({});
   const [filteredData, setFilteredData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [resetSignal, setResetSignal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -49,6 +51,10 @@ const Home = ({ addToCart }) => {
 
     setFilteredData(filtered);
   }, [rawData, filters]);
+
+  const handleFilterChange = ({ searchText, minPrice, maxPrice }) => {
+    setFilters({ searchText, minPrice, maxPrice });
+  };
 
   if (loading) {
     return (
@@ -100,6 +106,19 @@ const Home = ({ addToCart }) => {
           </div>
         </div>
       </section>
+
+      {/* Filter Bar */}
+      <div className="container">
+        <div className="filter-section">
+          <h2 className="filter-section-title">🔍 Tìm Kiếm Sản Phẩm</h2>
+          <FilterBar
+            onFilterChange={handleFilterChange}
+            initialSearch={filters.searchText || ''}
+            initialPrice=""
+            resetSignal={resetSignal}
+          />
+        </div>
+      </div>
 
       {/* Products by Category */}
       <div className="container">

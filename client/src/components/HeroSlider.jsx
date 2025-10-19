@@ -8,17 +8,17 @@ const HeroSlider = () => {
   const slides = [
     {
       id: 1,
-      image: '/images/1.png', // Thay bằng đường dẫn thực tế của bạn
+      image: '/images/1.jpg', // Thay bằng đường dẫn thực tế của bạn
       alt: 'Shop Hoa Hoàng Anh - Giao hàng toàn quốc'
     },
     {
       id: 2,
-      image: '/images/2.png',
+      image: '/images/2.jpg',
       alt: 'Cung cấp hoa tươi - Miễn phí giao nội thành'
     },
     {
       id: 3,
-      image: '/images/3.png',
+      image: '/images/3.jpg',
       alt: 'Biến mọi dịp trở nên đặc biệt'
     }
   ];

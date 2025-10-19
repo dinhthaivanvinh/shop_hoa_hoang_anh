@@ -4,13 +4,19 @@ import { useParams } from 'react-router-dom';
 import { CategoryTitle } from '../data/category';
 import ProductGrid from '../components/ProductGrid';
 import Pagination from '../components/Pagination';
+import FilterBar from '../components/FilterBar';
 import axiosClient from '../utils/axiosClient';
 import { useFilter } from '../context/FilterContext';
 import '../style/CategoryPage.css';
 
+// Import banner images
+import bannerKhaiTruong from '../assets/banners/khai-truong-banner.jpg';
+import bannerSinhNhat from '../assets/banners/sinh-nhat-banner.jpg';
+import bannerTangLe from '../assets/banners/tang-le-banner.jpg';
+
 const CategoryPage = ({ addToCart }) => {
   const { categorySlug } = useParams();
-  const { filters, setResetSignal } = useFilter();
+  const { filters, setFilters } = useFilter();
 
   const categoryTitleMap = {
     'sinh-nhat': CategoryTitle.SinhNhat,
@@ -25,14 +31,35 @@ const CategoryPage = ({ addToCart }) => {
   };
 
   const categoryDescMap = {
-    'sinh-nhat': 'Chúc mừng sinh nhật với những bó hoa tươi thắm',
-    'khai-truong': 'Hoa khai trương - Chúc mừng thành công rực rỡ',
-    'tang-le': 'Hoa tang lễ - Thành kính viếng tiễn người đã khuất'
+    'sinh-nhat': 'Thêm tươi, thêm yêu đời',
+    'khai-truong': 'Hoa Khai Trương',
+    'tang-le': 'Hoa nói thay lời vĩnh biệt'
+  };
+
+  const categorySubtitleMap = {
+    'sinh-nhat': 'Hoa Sinh Nhật',
+    'khai-truong': 'SHOP NOW!',
+    'tang-le': 'HOA Tang Lễ'
+  };
+
+  const categoryBannerMap = {
+    'sinh-nhat': bannerSinhNhat,
+    'khai-truong': bannerKhaiTruong,
+    'tang-le': bannerTangLe
+  };
+
+  const categoryZaloMap = {
+    'sinh-nhat': 'ZALO: 0378776399',
+    'khai-truong': 'ZALO: 0378776399',
+    'tang-le': 'ZALO: 0378776399'
   };
 
   const selectedCategoryTitle = categoryTitleMap[categorySlug];
   const categoryIcon = categoryIconMap[categorySlug] || '🌸';
   const categoryDesc = categoryDescMap[categorySlug] || '';
+  const categorySubtitle = categorySubtitleMap[categorySlug] || '';
+  const categoryBanner = categoryBannerMap[categorySlug];
+  const categoryZalo = categoryZaloMap[categorySlug] || '';
   const title = selectedCategoryTitle.replace(/([A-Z])/g, ' $1').trim();
 
   const [page, setPage] = useState(1);
@@ -40,13 +67,17 @@ const CategoryPage = ({ addToCart }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [imageError, setImageError] = useState(false);
+  const [resetSignal, setResetSignal] = useState(false);
 
   // Reset filter signal khi đổi danh mục
   useEffect(() => {
     setResetSignal(true);
+    setImageError(false);
+    setFilters({ searchText: '', minPrice: null, maxPrice: null });
     const timer = setTimeout(() => setResetSignal(false), 100);
     return () => clearTimeout(timer);
-  }, [categorySlug, setResetSignal]);
+  }, [categorySlug, setFilters]);
 
   // Reset trang về 1 khi đổi bộ lọc hoặc danh mục
   useEffect(() => {
@@ -79,6 +110,10 @@ const CategoryPage = ({ addToCart }) => {
       });
   }, [page, filters, categorySlug]);
 
+  const handleFilterChange = ({ searchText, minPrice, maxPrice }) => {
+    setFilters({ searchText, minPrice, maxPrice });
+  };
+
   if (loading) {
     return (
       <div className="category-page">
@@ -106,27 +141,75 @@ const CategoryPage = ({ addToCart }) => {
 
   return (
     <div className="category-page">
-      {/* Category Header */}
-      <div className="category-header">
-        <div className="category-header-content">
-          <div className="category-icon-wrapper">
-            <span className="category-icon">{categoryIcon}</span>
-          </div>
-          <div className="category-info">
-            <h1 className="category-title">{title}</h1>
-            <p className="category-description">{categoryDesc}</p>
-            <div className="category-stats">
-              <span className="stat-item">
-                📦 {products.length > 0 ? `${products.length} sản phẩm` : 'Đang cập nhật'}
-              </span>
+      {/* Category Header with Banner Image */}
+      <div
+        className={`category-header category-header-${categorySlug}`}
+        style={{
+          backgroundImage: !imageError && categoryBanner
+            ? `url(${categoryBanner})`
+            : 'none'
+        }}
+      >
+        <div className="category-header-overlay"></div>
+        {/* <div className="category-header-content">
+          <div className="category-banner-text">
+            <div className="category-icon-wrapper">
+              <span className="category-icon">{categoryIcon}</span>
+            </div>
+            <div className="category-info">
+              <p className="category-subtitle">{categorySubtitle}</p>
+              <h1 className="category-title">{categoryDesc}</h1>
+              <div className="category-stats">
+                <span className="stat-item stat-zalo">
+                  {categoryZalo}
+                </span>
+                <span className="stat-item stat-count">
+                  📦 {products.length > 0 ? `${products.length} sản phẩm` : 'Đang cập nhật'}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+
+          {categoryBanner && !imageError && (
+            <div className="category-banner-preview">
+              <img
+                src={categoryBanner}
+                alt={`${title} banner`}
+                className="banner-preview-image"
+                onError={() => setImageError(true)}
+              />
+            </div>
+          )}
+        </div> */}
+
+        {/* Fallback banner if image fails to load */}
+        {imageError && (
+          <img
+            src={categoryBanner}
+            alt={`${title} banner`}
+            className="category-banner-fallback"
+            style={{ display: 'none' }}
+            onError={() => setImageError(true)}
+          />
+        )}
       </div>
 
-      {/* Products Grid */}
+      {/* Filter Bar */}
       <div className="category-content">
         <div className="container">
+          <div className="category-filter-section">
+            <h2 className="filter-section-title">
+              🔍 Tìm Kiếm Sản Phẩm
+            </h2>
+            <FilterBar
+              onFilterChange={handleFilterChange}
+              initialSearch={filters.searchText || ''}
+              initialPrice=""
+              resetSignal={resetSignal}
+            />
+          </div>
+
+          {/* Products Grid */}
           {products.length === 0 ? (
             <div className="no-products">
               <div className="no-products-icon">🔍</div>

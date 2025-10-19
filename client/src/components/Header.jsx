@@ -9,17 +9,26 @@ const Header = ({ cartCount = 0 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+
+  // Separate state for mobile dropdowns
+  const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
+  const [mobileAdminOpen, setMobileAdminOpen] = useState(false);
+
   const navigate = useNavigate();
   const dropdownRef = useRef();
   const categoryRef = useRef();
   const location = useLocation();
 
+  // Close all menus when route changes
   useEffect(() => {
     setMenuOpen(false);
     setSubmenuOpen(false);
     setCategoryMenuOpen(false);
+    setMobileCategoryOpen(false);
+    setMobileAdminOpen(false);
   }, [location.pathname]);
 
+  // Handle click outside for desktop dropdowns
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -29,15 +38,20 @@ const Header = ({ cartCount = 0 }) => {
         setCategoryMenuOpen(false);
       }
     };
+
     const handleKey = (e) => {
       if (e.key === 'Escape') {
         setMenuOpen(false);
         setSubmenuOpen(false);
         setCategoryMenuOpen(false);
+        setMobileCategoryOpen(false);
+        setMobileAdminOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleKey);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKey);
@@ -50,10 +64,17 @@ const Header = ({ cartCount = 0 }) => {
     navigate('/');
   };
 
+  // Handler to close sidebar when clicking on links
+  const handleMobileLinkClick = () => {
+    setMenuOpen(false);
+    setMobileCategoryOpen(false);
+    setMobileAdminOpen(false);
+  };
+
   return (
     <header className="header">
-      {/* Top Bar */}
-      <div className="header-top">
+      {/* Top Bar - Commented out as in your code */}
+      {/* <div className="header-top">
         <div className="header-top-container">
           <div className="header-top-left">
             <span className="top-info">
@@ -68,7 +89,7 @@ const Header = ({ cartCount = 0 }) => {
             </span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Header */}
       <div className="header-main">
@@ -100,7 +121,7 @@ const Header = ({ cartCount = 0 }) => {
               Trang Chủ
             </Link>
 
-            {/* Dropdown Danh mục */}
+            {/* Desktop Dropdown Danh mục */}
             <div
               className={`nav-item has-dropdown ${categoryMenuOpen ? 'open' : ''}`}
               ref={categoryRef}
@@ -184,44 +205,72 @@ const Header = ({ cartCount = 0 }) => {
         </div>
       </div>
 
-      {/* Mobile Sidebar */}
-      <div className={`sidebar-backdrop ${menuOpen ? 'visible' : ''}`} onClick={() => setMenuOpen(false)} />
+      {/* Mobile Sidebar Backdrop */}
+      <div
+        className={`sidebar-backdrop ${menuOpen ? 'visible' : ''}`}
+        onClick={() => setMenuOpen(false)}
+      />
 
+      {/* Mobile Sidebar */}
       <aside className={`sidebar-menu ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
         <div className="sidebar-header">
           <span className="sidebar-logo">🌸 Hoàng Anh</span>
-          <button className="close-btn" aria-label="Close menu" onClick={() => setMenuOpen(false)}>
+          <button
+            className="close-btn"
+            aria-label="Close menu"
+            onClick={() => setMenuOpen(false)}
+          >
             ✕
           </button>
         </div>
 
         <nav className="sidebar-nav" aria-label="Mobile">
-          <Link to="/" className="sidebar-link" onClick={() => setMenuOpen(false)}>
+          {/* Trang Chủ */}
+          <Link
+            to="/"
+            className="sidebar-link"
+            onClick={handleMobileLinkClick}
+          >
             🏠 Trang Chủ
           </Link>
 
+          {/* Mobile Danh Mục Dropdown */}
           <div className="sidebar-section">
             <button
               className="sidebar-link sidebar-dropdown-toggle"
-              onClick={() => setCategoryMenuOpen(prev => !prev)}
+              onClick={() => setMobileCategoryOpen(prev => !prev)}
+              aria-expanded={mobileCategoryOpen}
             >
               🌺 Danh Mục Hoa
-              <span className={`arrow ${categoryMenuOpen ? 'open' : ''}`}>▾</span>
+              <span className={`arrow ${mobileCategoryOpen ? 'open' : ''}`}>▾</span>
             </button>
-            {categoryMenuOpen && (
+
+            {mobileCategoryOpen && (
               <ul className="sidebar-dropdown">
                 <li>
-                  <Link to="/category/khai-truong" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    to="/category/khai-truong"
+                    className="sidebar-sublink"
+                    onClick={handleMobileLinkClick}
+                  >
                     🎉 Hoa Khai Trương
                   </Link>
                 </li>
                 <li>
-                  <Link to="/category/sinh-nhat" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    to="/category/sinh-nhat"
+                    className="sidebar-sublink"
+                    onClick={handleMobileLinkClick}
+                  >
                     🎂 Hoa Sinh Nhật
                   </Link>
                 </li>
                 <li>
-                  <Link to="/category/tang-le" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    to="/category/tang-le"
+                    className="sidebar-sublink"
+                    onClick={handleMobileLinkClick}
+                  >
                     🕯️ Hoa Tang Lễ
                   </Link>
                 </li>
@@ -229,29 +278,46 @@ const Header = ({ cartCount = 0 }) => {
             )}
           </div>
 
+          {/* Mobile Admin Dropdown */}
           {isAdmin && (
             <div className="sidebar-section">
               <button
                 className="sidebar-link sidebar-dropdown-toggle"
-                onClick={() => setSubmenuOpen(prev => !prev)}
+                onClick={() => setMobileAdminOpen(prev => !prev)}
+                aria-expanded={mobileAdminOpen}
               >
                 ⚙️ Quản Trị
-                <span className={`arrow ${submenuOpen ? 'open' : ''}`}>▾</span>
+                <span className={`arrow ${mobileAdminOpen ? 'open' : ''}`}>▾</span>
               </button>
-              {submenuOpen && (
+
+              {mobileAdminOpen && (
                 <ul className="sidebar-dropdown">
                   <li>
-                    <Link to="/admin/import" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                    <Link
+                      to="/admin/import"
+                      className="sidebar-sublink"
+                      onClick={handleMobileLinkClick}
+                    >
                       📤 Import sản phẩm
                     </Link>
                   </li>
                   <li>
-                    <Link to="/admin-orders" className="sidebar-sublink" onClick={() => setMenuOpen(false)}>
+                    <Link
+                      to="/admin-orders"
+                      className="sidebar-sublink"
+                      onClick={handleMobileLinkClick}
+                    >
                       📋 Quản lý đơn hàng
                     </Link>
                   </li>
                   <li>
-                    <button className="sidebar-sublink" onClick={() => { setMenuOpen(false); handleLogout(); }}>
+                    <button
+                      className="sidebar-sublink"
+                      onClick={() => {
+                        handleMobileLinkClick();
+                        handleLogout();
+                      }}
+                    >
                       🚪 Đăng xuất
                     </button>
                   </li>
@@ -260,7 +326,12 @@ const Header = ({ cartCount = 0 }) => {
             </div>
           )}
 
-          <Link to="/contact" className="sidebar-link" onClick={() => setMenuOpen(false)}>
+          {/* Liên Hệ */}
+          <Link
+            to="/contact"
+            className="sidebar-link"
+            onClick={handleMobileLinkClick}
+          >
             📞 Liên Hệ
           </Link>
         </nav>

@@ -16,6 +16,7 @@ import { AdminProvider } from './context/AdminContext';
 import CsvUploader from './components/CsvUploader';
 import AdminOrders from './pages/AdminOrders';
 import { FilterProvider } from './context/FilterContext';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -72,6 +73,7 @@ function App() {
     <FilterProvider>
       <AdminProvider>
         <Router>
+          <ScrollToTop />
           <Layout cartCount={cartItems.length}>
             <Routes>
               <Route path="/order" element={<OrderPage cartItems={cartItems} clearCart={clearCart} />} />

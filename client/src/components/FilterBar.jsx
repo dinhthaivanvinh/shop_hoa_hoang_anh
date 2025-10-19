@@ -15,6 +15,7 @@ const FilterBar = ({ onFilterChange, initialSearch = '', initialPrice = '', rese
   const [priceRange, setPriceRange] = useState(initialPrice);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef();
+  const debounceTimer = useRef(null);
 
   useEffect(() => {
     if (resetSignal) {
@@ -22,7 +23,7 @@ const FilterBar = ({ onFilterChange, initialSearch = '', initialPrice = '', rese
       setPriceRange('');
       onFilterChange({ searchText: '', minPrice: '', maxPrice: '' });
     }
-  }, [resetSignal]);
+  }, [resetSignal, onFilterChange]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -60,6 +61,21 @@ const FilterBar = ({ onFilterChange, initialSearch = '', initialPrice = '', rese
     onFilterChange({ searchText: search, minPrice, maxPrice });
   };
 
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchText(value);
+
+    // Clear previous timer
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    // Set new timer to trigger filter after 500ms of no typing
+    debounceTimer.current = setTimeout(() => {
+      triggerFilter(value, priceRange);
+    }, 500);
+  };
+
   const handleSelect = (value) => {
     setPriceRange(value);
     setDropdownOpen(false);
@@ -69,8 +85,23 @@ const FilterBar = ({ onFilterChange, initialSearch = '', initialPrice = '', rese
   const resetFilter = () => {
     setSearchText('');
     setPriceRange('');
+
+    // Clear debounce timer if any
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
     triggerFilter('', '');
   };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="filter-bar">
@@ -78,10 +109,7 @@ const FilterBar = ({ onFilterChange, initialSearch = '', initialPrice = '', rese
         type="text"
         placeholder="🔍 Tìm sản phẩm..."
         value={searchText}
-        onChange={(e) => {
-          setSearchText(e.target.value);
-          triggerFilter(e.target.value, priceRange);
-        }}
+        onChange={handleSearchChange}
       />
 
       {/* Custom dropdown */}
