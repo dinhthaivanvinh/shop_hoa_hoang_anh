@@ -70,6 +70,22 @@
   margin-bottom: 16px;
 }
 
+/* Footer Logo Image - MỚI */
+.footer-logo-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(210, 145, 188, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.footer-logo:hover .footer-logo-image {
+  transform: scale(1.05);
+}
+
 .footer-logo-icon {
   font-size: 2.5rem;
 }
@@ -178,6 +194,15 @@
     font-size: 1rem;
   }
 
+  .footer-logo-image {
+    width: 45px;
+    height: 45px;
+  }
+
+  .footer-logo-main {
+    font-size: 1.25rem;
+  }
+
   .footer-social {
     justify-content: flex-start;
   }
@@ -201,8 +226,13 @@
     padding: 24px 12px 16px;
   }
 
+  .footer-logo-image {
+    width: 40px;
+    height: 40px;
+  }
+
   .footer-logo-main {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   .footer-logo-icon {

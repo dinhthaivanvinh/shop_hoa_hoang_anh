@@ -1,5 +1,6 @@
 // src/pages/Home.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import ProductGrid from '../components/ProductGrid';
 import SectionHeader from '../components/SectionHeader';
 import HeroSlider from '../components/HeroSlider';
@@ -10,19 +11,50 @@ import '../style/Home.css';
 
 const Home = ({ addToCart }) => {
   const { filters, setFilters } = useFilter();
-  const [rawData, setRawData] = useState({});
-  const [filteredData, setFilteredData] = useState({});
+  const [productData, setProductData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
+  const isInitialMount = useRef(true);
+  const location = useLocation();
 
+  // Reset filters when navigating to Home page
   useEffect(() => {
-    setLoading(true);
+    // Reset filters
+    setFilters({ searchText: '', minPrice: null, maxPrice: null });
+
+    // Toggle reset signal to trigger FilterBar reset
+    setResetSignal(prev => !prev);
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+  }, [location.pathname, setFilters]);
+
+  // Fetch products từ API với filters
+  useEffect(() => {
+    // Skip initial mount để không call API 2 lần
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      setLoading(true);
+    } else {
+      setLoading(true);
+    }
+
     setError(null);
 
-    axiosClient.get('/api/products/home')
+    // Build query params
+    const query = new URLSearchParams();
+    if (filters.searchText) query.append('name', filters.searchText);
+    if (filters.minPrice) query.append('minPrice', filters.minPrice);
+    if (filters.maxPrice) query.append('maxPrice', filters.maxPrice);
+
+    const url = query.toString()
+      ? `/api/products/home?${query.toString()}`
+      : '/api/products/home';
+
+    axiosClient.get(url)
       .then(res => {
-        setRawData(res.data);
+        setProductData(res.data);
         setLoading(false);
       })
       .catch(err => {
@@ -30,33 +62,14 @@ const Home = ({ addToCart }) => {
         setError('Không thể tải sản phẩm. Vui lòng thử lại sau.');
         setLoading(false);
       });
-  }, []);
+  }, [filters]);
 
-  useEffect(() => {
-    const { searchText, minPrice, maxPrice } = filters;
-
-    const filtered = {};
-    Object.entries(rawData).forEach(([slug, { label, products }]) => {
-      const matched = products.filter(p => {
-        const matchName = searchText ? p.name.toLowerCase().includes(searchText.toLowerCase()) : true;
-        const matchMin = minPrice ? p.price >= Number(minPrice) : true;
-        const matchMax = maxPrice ? p.price <= Number(maxPrice) : true;
-        return matchName && matchMin && matchMax;
-      });
-
-      if (matched.length > 0) {
-        filtered[slug] = { label, products: matched };
-      }
-    });
-
-    setFilteredData(filtered);
-  }, [rawData, filters]);
-
-  const handleFilterChange = ({ searchText, minPrice, maxPrice }) => {
+  const handleFilterChange = useCallback(({ searchText, minPrice, maxPrice }) => {
     setFilters({ searchText, minPrice, maxPrice });
-  };
+  }, [setFilters]);
 
-  if (loading) {
+  // Chỉ show loading lần đầu
+  if (loading && isInitialMount.current) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
@@ -77,7 +90,7 @@ const Home = ({ addToCart }) => {
     );
   }
 
-  const hasResults = Object.keys(filteredData).length > 0;
+  const hasResults = Object.keys(productData).length > 0;
 
   return (
     <div className="home">
@@ -112,6 +125,7 @@ const Home = ({ addToCart }) => {
         <div className="filter-section">
           <h2 className="filter-section-title">🔍 Tìm Kiếm Sản Phẩm</h2>
           <FilterBar
+            key={`home-filter-${resetSignal}`}
             onFilterChange={handleFilterChange}
             initialSearch={filters.searchText || ''}
             initialPrice=""
@@ -122,14 +136,19 @@ const Home = ({ addToCart }) => {
 
       {/* Products by Category */}
       <div className="container">
-        {!hasResults ? (
+        {loading && !isInitialMount.current ? (
+          <div className="loading-inline">
+            <div className="loading-spinner-small"></div>
+            <p>Đang tìm kiếm...</p>
+          </div>
+        ) : !hasResults ? (
           <div className="no-results">
             <div className="no-results-icon">🔍</div>
             <h3>Không tìm thấy sản phẩm</h3>
             <p>Vui lòng thử tìm kiếm với từ khóa khác hoặc điều chỉnh bộ lọc</p>
           </div>
         ) : (
-          Object.entries(filteredData).map(([slug, { label, products }]) => (
+              Object.entries(productData).map(([slug, { label, products }]) => (
             <section key={slug} className="category-section">
               <SectionHeader title={`🌸 ${label}`} link={`/category/${slug}`} />
               <ProductGrid products={products} addToCart={addToCart} />

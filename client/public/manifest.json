@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Hoàng Anh",
+  "name": "Shop Hoa Hoàng Anh - Hoa tươi mỗi ngày",
+  "description": "Shop hoa tươi uy tín tại Huế. Chuyên cung cấp hoa sinh nhật, khai trương, tang lễ",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#D291BC",
+  "background_color": "#FAF7F9",
+  "orientation": "portrait"
 }

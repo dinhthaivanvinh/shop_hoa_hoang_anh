@@ -39,6 +39,33 @@
   animation: spin 1s linear infinite;
 }
 
+.loading-spinner-small {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #F2D9EB;
+  border-top: 3px solid #D291BC;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  gap: 16px;
+  background: #fff;
+  border-radius: 16px;
+  margin: 32px 0;
+}
+
+.loading-inline p {
+  font-size: 1rem;
+  color: #6B4C6D;
+  margin: 0;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -242,28 +269,6 @@
 }
 
 /* ============================================
-   CATEGORY FILTER SECTION
-   ============================================ */
-
-.category-filter-section {
-  background: #fff;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(210, 145, 188, 0.08);
-  margin-bottom: 32px;
-}
-
-.filter-section-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2D1B2E;
-  margin: 0 0 16px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* ============================================
    CATEGORY CONTENT
    ============================================ */
 
@@ -340,14 +345,6 @@
   .category-subtitle {
     font-size: 1.25rem;
   }
-
-  .category-filter-section {
-    padding: 20px;
-  }
-
-  .filter-section-title {
-    font-size: 1.375rem;
-  }
 }
 
 /* ============================================
@@ -410,16 +407,6 @@
     font-size: 0.95rem;
   }
 
-  .category-filter-section {
-    padding: 16px;
-    margin-bottom: 24px;
-  }
-
-  .filter-section-title {
-    font-size: 1.25rem;
-    margin-bottom: 12px;
-  }
-
   .pagination-wrapper {
     margin-top: 32px;
   }
@@ -446,10 +433,6 @@
     font-size: 0.8rem;
     padding: 6px 12px;
   }
-
-  .filter-section-title {
-    font-size: 1.125rem;
-  }
 }
 
 /* ============================================
@@ -471,14 +454,6 @@
 
   .category-header-content {
     padding: 0 48px;
-  }
-
-  .category-filter-section {
-    padding: 32px;
-  }
-
-  .filter-section-title {
-    font-size: 1.625rem;
   }
 }
 

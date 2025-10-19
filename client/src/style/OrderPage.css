@@ -1,0 +1,452 @@
+/* src/style/OrderPage.css */
+
+/* ============================================
+   ORDER PAGE LAYOUT
+   ============================================ */
+
+.order-page {
+  background-color: #f9fafb;
+  min-height: 100vh;
+  padding: 24px 0 48px;
+}
+
+.order-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+
+.order-page-header {
+  text-align: center;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.back-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back-btn:hover {
+  background: #f9fafb;
+  border-color: #D291BC;
+  color: #D291BC;
+}
+
+.order-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.title-icon {
+  font-size: 2.5rem;
+}
+
+.order-subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ============================================
+   EMPTY ORDER
+   ============================================ */
+
+.empty-order {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 32px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  min-height: 400px;
+}
+
+.empty-order-icon {
+  font-size: 5rem;
+  margin-bottom: 24px;
+  opacity: 0.5;
+}
+
+.empty-order h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.empty-order p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+.back-to-shop-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #D291BC 0%, #C076A8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(210, 145, 188, 0.3);
+}
+
+.back-to-shop-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(210, 145, 188, 0.4);
+}
+
+/* ============================================
+   ORDER CONTENT LAYOUT
+   ============================================ */
+
+.order-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* ============================================
+   ORDER SUMMARY SECTION
+   ============================================ */
+
+.order-summary-section {
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+.order-summary {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summary-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 20px 0;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-icon {
+  font-size: 1.5rem;
+}
+
+/* Summary Items */
+.summary-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.summary-items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.summary-items::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.summary-items::-webkit-scrollbar-thumb {
+  background: #D291BC;
+  border-radius: 10px;
+}
+
+.summary-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.summary-item:hover {
+  background: #f3f4f6;
+}
+
+.item-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-details h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.item-quantity {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.item-price {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #D291BC;
+  flex-shrink: 0;
+}
+
+.summary-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 16px 0;
+}
+
+/* Summary Pricing */
+.summary-pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pricing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.pricing-total {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+  padding-top: 12px;
+}
+
+.total-amount {
+  font-size: 1.5rem;
+  color: #D291BC;
+}
+
+/* Order Features */
+.order-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.feature-icon {
+  font-size: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE - DESKTOP
+   ============================================ */
+
+@media (min-width: 1024px) {
+  .order-content {
+    grid-template-columns: 1fr 400px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+
+@media (max-width: 1023px) {
+  .order-summary-section {
+    position: static;
+  }
+
+  .order-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .order-page {
+    padding: 16px 0 32px;
+  }
+
+  .order-page-header {
+    margin-bottom: 24px;
+  }
+
+  .back-btn {
+    position: static;
+    transform: none;
+    margin-bottom: 16px;
+    width: fit-content;
+  }
+
+  .order-title {
+    font-size: 1.5rem;
+  }
+
+  .title-icon {
+    font-size: 2rem;
+  }
+
+  .order-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .order-summary {
+    padding: 20px;
+  }
+
+  .summary-title {
+    font-size: 1.125rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
+@media (max-width: 480px) {
+  .order-page {
+    padding: 12px 0 24px;
+  }
+
+  .order-container {
+    padding: 0 12px;
+  }
+
+  .order-page-header {
+    margin-bottom: 20px;
+  }
+
+  .order-title {
+    font-size: 1.25rem;
+  }
+
+  .title-icon {
+    font-size: 1.75rem;
+  }
+
+  .back-btn {
+    font-size: 0.875rem;
+    padding: 6px 12px;
+  }
+
+  .empty-order {
+    padding: 48px 24px;
+    min-height: 300px;
+  }
+
+  .empty-order-icon {
+    font-size: 4rem;
+  }
+
+  .empty-order h2 {
+    font-size: 1.25rem;
+  }
+
+  .order-summary {
+    padding: 16px;
+  }
+
+  .summary-items {
+    max-height: 300px;
+  }
+
+  .item-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .item-details h4 {
+    font-size: 0.875rem;
+  }
+
+  .item-quantity {
+    font-size: 0.8rem;
+  }
+
+  .item-price {
+    font-size: 0.9rem;
+  }
+
+  .pricing-total {
+    font-size: 1rem;
+  }
+
+  .total-amount {
+    font-size: 1.25rem;
+  }
+
+  .feature-item {
+    font-size: 0.8rem;
+  }
+}

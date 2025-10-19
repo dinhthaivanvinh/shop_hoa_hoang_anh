@@ -1,5 +1,5 @@
 // src/pages/CategoryPage.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { CategoryTitle } from '../data/category';
 import ProductGrid from '../components/ProductGrid';
@@ -13,6 +13,16 @@ import '../style/CategoryPage.css';
 import bannerKhaiTruong from '../assets/banners/khai-truong-banner.jpg';
 import bannerSinhNhat from '../assets/banners/sinh-nhat-banner.jpg';
 import bannerTangLe from '../assets/banners/tang-le-banner.jpg';
+
+// Helper function to convert filters to price range string
+const getPriceRangeValue = (minPrice, maxPrice) => {
+  if (!minPrice && !maxPrice) return '';
+  if (!minPrice && maxPrice === 500000) return 'under500';
+  if (minPrice === 500000 && maxPrice === 700000) return '500to700';
+  if (minPrice === 700000 && maxPrice === 1000000) return '700to1000';
+  if (minPrice === 1000000 && !maxPrice) return 'above1000';
+  return '';
+};
 
 const CategoryPage = ({ addToCart }) => {
   const { categorySlug } = useParams();
@@ -69,23 +79,34 @@ const CategoryPage = ({ addToCart }) => {
   const [error, setError] = useState(null);
   const [imageError, setImageError] = useState(false);
   const [resetSignal, setResetSignal] = useState(false);
+  const isInitialMount = useRef(true);
 
-  // Reset filter signal khi đổi danh mục
+  // Reset filters khi đổi category
   useEffect(() => {
-    setResetSignal(true);
+    console.log('🔄 Category changed:', categorySlug);
     setImageError(false);
+
+    // Reset filters
     setFilters({ searchText: '', minPrice: null, maxPrice: null });
-    const timer = setTimeout(() => setResetSignal(false), 100);
-    return () => clearTimeout(timer);
+
+    // Toggle reset signal to trigger FilterBar reset
+    setResetSignal(prev => !prev);
+
+    // Scroll to top
+    window.scrollTo(0, 0);
   }, [categorySlug, setFilters]);
 
-  // Reset trang về 1 khi đổi bộ lọc hoặc danh mục
+  // Reset page khi filters change
   useEffect(() => {
     setPage(1);
-  }, [filters, categorySlug]);
+  }, [filters.searchText, filters.minPrice, filters.maxPrice]);
 
-  // Gọi API sản phẩm theo danh mục và bộ lọc
+  // Fetch products
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -96,9 +117,17 @@ const CategoryPage = ({ addToCart }) => {
     if (filters.minPrice) query.append('minPrice', filters.minPrice);
     if (filters.maxPrice) query.append('maxPrice', filters.maxPrice);
 
+    console.log('📡 Fetching products with:', {
+      categorySlug,
+      page,
+      filters,
+      queryString: query.toString()
+    });
+
     axiosClient
       .get(`/api/products/category?${query.toString()}`)
       .then(res => {
+        console.log('✅ Products received:', res.data.products.length);
         setProducts(res.data.products);
         setTotalPages(res.data.totalPages);
         setLoading(false);
@@ -108,13 +137,19 @@ const CategoryPage = ({ addToCart }) => {
         setError('Không thể tải sản phẩm. Vui lòng thử lại sau.');
         setLoading(false);
       });
-  }, [page, filters, categorySlug]);
+  }, [page, filters.searchText, filters.minPrice, filters.maxPrice, categorySlug]);
 
-  const handleFilterChange = ({ searchText, minPrice, maxPrice }) => {
+  const handleFilterChange = useCallback(({ searchText, minPrice, maxPrice }) => {
+    console.log('🔍 CategoryPage handleFilterChange:', { searchText, minPrice, maxPrice });
     setFilters({ searchText, minPrice, maxPrice });
-  };
+  }, [setFilters]);
 
-  if (loading) {
+  const handlePageChange = useCallback((newPage) => {
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  if (loading && isInitialMount.current) {
     return (
       <div className="category-page">
         <div className="loading-container">
@@ -139,6 +174,9 @@ const CategoryPage = ({ addToCart }) => {
     );
   }
 
+  // Get current price range value for FilterBar
+  const currentPriceRange = getPriceRangeValue(filters.minPrice, filters.maxPrice);
+
   return (
     <div className="category-page">
       {/* Category Header with Banner Image */}
@@ -151,38 +189,7 @@ const CategoryPage = ({ addToCart }) => {
         }}
       >
         <div className="category-header-overlay"></div>
-        {/* <div className="category-header-content">
-          <div className="category-banner-text">
-            <div className="category-icon-wrapper">
-              <span className="category-icon">{categoryIcon}</span>
-            </div>
-            <div className="category-info">
-              <p className="category-subtitle">{categorySubtitle}</p>
-              <h1 className="category-title">{categoryDesc}</h1>
-              <div className="category-stats">
-                <span className="stat-item stat-zalo">
-                  {categoryZalo}
-                </span>
-                <span className="stat-item stat-count">
-                  📦 {products.length > 0 ? `${products.length} sản phẩm` : 'Đang cập nhật'}
-                </span>
-              </div>
-            </div>
-          </div>
 
-          {categoryBanner && !imageError && (
-            <div className="category-banner-preview">
-              <img
-                src={categoryBanner}
-                alt={`${title} banner`}
-                className="banner-preview-image"
-                onError={() => setImageError(true)}
-              />
-            </div>
-          )}
-        </div> */}
-
-        {/* Fallback banner if image fails to load */}
         {imageError && (
           <img
             src={categoryBanner}
@@ -202,40 +209,45 @@ const CategoryPage = ({ addToCart }) => {
               🔍 Tìm Kiếm Sản Phẩm
             </h2>
             <FilterBar
+              key={`filter-${categorySlug}-${resetSignal}`}
               onFilterChange={handleFilterChange}
               initialSearch={filters.searchText || ''}
-              initialPrice=""
+              initialPrice={currentPriceRange}
               resetSignal={resetSignal}
             />
           </div>
 
-          {/* Products Grid */}
-          {products.length === 0 ? (
+          {/* Loading State */}
+          {loading && !isInitialMount.current ? (
+            <div className="loading-inline">
+              <div className="loading-spinner-small"></div>
+              <p>Đang tìm kiếm...</p>
+            </div>
+          ) : products.length === 0 ? (
+          /* No Products */
             <div className="no-products">
               <div className="no-products-icon">🔍</div>
               <h3>Không tìm thấy sản phẩm</h3>
               <p>Vui lòng thử tìm kiếm với từ khóa khác hoặc điều chỉnh bộ lọc</p>
             </div>
           ) : (
-              <>
-                <ProductGrid
-                  products={products}
-                  addToCart={addToCart}
-                />
+                /* Products Grid */
+                <>
+                  <ProductGrid
+                    products={products}
+                    addToCart={addToCart}
+                  />
 
-                {totalPages > 1 && (
-                  <div className="pagination-wrapper">
-                    <Pagination
-                      currentPage={page}
-                      totalPages={totalPages}
-                      onPageChange={(newPage) => {
-                        setPage(newPage);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                    />
-                  </div>
-                )}
-              </>
+                  {totalPages > 1 && (
+                    <div className="pagination-wrapper">
+                      <Pagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                      />
+                    </div>
+                  )}
+                </>
           )}
         </div>
       </div>

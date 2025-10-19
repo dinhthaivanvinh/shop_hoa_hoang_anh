@@ -88,39 +88,74 @@ const slugify = (str) => {
  * GET /api/products/home
  * returns object keyed by category name -> array of products (limit 10 each)
  */
+// Backend API - routes/products.js (hoặc tương tự)
+
 router.get('/home', async (req, res) => {
   try {
-    // const cacheKey = 'home:products';
-    // const cached = cache.get(cacheKey);
-    // if (cached) return res.json(cached);
+    const { name, minPrice, maxPrice } = req.query;
 
     const result = {};
 
     console.log('🔍 Truy vấn danh mục có sản phẩm...');
-    console.log('SQL:', `SELECT DISTINCT p.category_id, c.name FROM products p JOIN categories c ON p.category_id = c.id`);
+    console.log('📊 Filters:', { name, minPrice, maxPrice });
 
-    const [categories] = await db.execute(`SELECT DISTINCT p.category_id, c.name FROM products p JOIN categories c ON p.category_id = c.id`);
+    // Lấy danh sách categories có sản phẩm
+    const [categories] = await db.execute(`
+      SELECT DISTINCT p.category_id, c.name 
+      FROM products p 
+      JOIN categories c ON p.category_id = c.id
+    `);
+
     console.log('📦 Danh mục:', categories);
 
+    // Với mỗi danh mục, lấy sản phẩm có filter
+    await Promise.all(categories.map(async ({ category_id, name: categoryName }) => {
+      const slug = slugify(categoryName);
 
-    // Với mỗi danh mục, lấy 10 sản phẩm mới nhất
-    await Promise.all(categories.map(async ({ category_id, name }) => {
-      const slug = slugify(name);
-      const [products] = await db.execute(`
+      // Build dynamic WHERE clause
+      let whereConditions = ['category_id = ?'];
+      let queryParams = [category_id];
+
+      // Filter by name
+      if (name) {
+        whereConditions.push('name LIKE ?');
+        queryParams.push(`%${name}%`);
+      }
+
+      // Filter by minPrice
+      if (minPrice) {
+        whereConditions.push('price >= ?');
+        queryParams.push(parseFloat(minPrice));
+      }
+
+      // Filter by maxPrice
+      if (maxPrice) {
+        whereConditions.push('price <= ?');
+        queryParams.push(parseFloat(maxPrice));
+      }
+
+      const whereClause = whereConditions.join(' AND ');
+
+      const query = `
         SELECT id, name, price, image
         FROM products
-        WHERE category_id = ?
+        WHERE ${whereClause}
         ORDER BY created_at DESC
         LIMIT 10
-      `, [category_id]);
+      `;
 
-      result[slug] = {
-        label: name,
-        products
-      };
+      const [products] = await db.execute(query, queryParams);
+
+      // Chỉ thêm vào result nếu có sản phẩm
+      if (products.length > 0) {
+        result[slug] = {
+          label: categoryName,
+          products
+        };
+      }
     }));
 
-    // cache.set(cacheKey, result);
+    console.log('✅ Kết quả:', Object.keys(result).length, 'categories');
 
     res.json(result);
 

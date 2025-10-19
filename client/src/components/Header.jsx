@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext';
 import '../style/Header.css';
+import logoImage from '../assets/logo.png'; // 👈 Import logo
 
 const Header = ({ cartCount = 0 }) => {
   const { isAdmin, setIsAdmin } = useContext(AdminContext);
@@ -73,24 +74,6 @@ const Header = ({ cartCount = 0 }) => {
 
   return (
     <header className="header">
-      {/* Top Bar - Commented out as in your code */}
-      {/* <div className="header-top">
-        <div className="header-top-container">
-          <div className="header-top-left">
-            <span className="top-info">
-              <span className="icon">📧</span>
-              <a href="mailto:shophoahoanganh@gmail.com">shophoahoanganh@gmail.com</a>
-            </span>
-          </div>
-          <div className="header-top-right">
-            <span className="top-info">
-              <span className="icon">📞</span>
-              <a href="tel:0123456789">Hotline: 0123 456 789</a>
-            </span>
-          </div>
-        </div>
-      </div> */}
-
       {/* Main Header */}
       <div className="header-main">
         <div className="header-container">
@@ -105,9 +88,13 @@ const Header = ({ cartCount = 0 }) => {
             <span></span>
           </button>
 
-          {/* Logo */}
+          {/* Logo - Thay emoji bằng ảnh thật */}
           <Link to="/" className="logo">
-            <span className="logo-icon">🌸</span>
+            <img
+              src={logoImage}
+              alt="Shop Hoa Hoàng Anh Logo"
+              className="logo-image"
+            />
             <span className="logo-text">
               <span className="logo-main">Shop Hoa Hoàng Anh</span>
               <span className="logo-sub">Tươi đẹp mỗi ngày</span>
@@ -214,7 +201,15 @@ const Header = ({ cartCount = 0 }) => {
       {/* Mobile Sidebar */}
       <aside className={`sidebar-menu ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
         <div className="sidebar-header">
-          <span className="sidebar-logo">🌸 Hoàng Anh</span>
+          {/* Logo trong sidebar */}
+          <div className="sidebar-logo-wrapper">
+            <img
+              src={logoImage}
+              alt="Hoàng Anh Logo"
+              className="sidebar-logo-image"
+            />
+            <span className="sidebar-logo">Hoàng Anh</span>
+          </div>
           <button
             className="close-btn"
             aria-label="Close menu"

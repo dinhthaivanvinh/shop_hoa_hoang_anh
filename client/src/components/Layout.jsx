@@ -3,6 +3,7 @@ import React from 'react';
 import Header from './Header';
 import '../style/Layout.css';
 import ScrollToTopButton from './ScrollToTopButton';
+import logoImage from '../assets/logo.png'; // 👈 Import logo
 
 const Layout = ({ children, cartCount }) => {
   const currentYear = new Date().getFullYear();
@@ -22,7 +23,11 @@ const Layout = ({ children, cartCount }) => {
             {/* Company Info */}
             <div className="footer-section">
               <div className="footer-logo">
-                <span className="footer-logo-icon">🌸</span>
+                <img
+                  src={logoImage}
+                  alt="Hoàng Anh Logo"
+                  className="footer-logo-image"
+                />
                 <div className="footer-logo-text">
                   <span className="footer-logo-main">Hoàng Anh</span>
                   <span className="footer-logo-sub">Hoa tươi mỗi ngày</span>

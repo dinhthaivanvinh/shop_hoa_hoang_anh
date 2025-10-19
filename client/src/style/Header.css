@@ -94,6 +94,19 @@
   flex: 0 0 auto;
 }
 
+/* Logo Image - MỚI */
+.logo-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover .logo-image {
+  transform: scale(1.05);
+}
+
 .logo-icon {
   font-size: 2.5rem;
   line-height: 1;
@@ -356,6 +369,22 @@
   color: #fff;
 }
 
+/* Sidebar Logo - MỚI */
+.sidebar-logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-logo-image {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: white;
+  padding: 2px;
+}
+
 .sidebar-logo {
   font-size: 1.5rem;
   font-weight: 700;
@@ -459,6 +488,11 @@
     padding: 16px 24px;
   }
 
+  .logo-image {
+    width: 55px;
+    height: 55px;
+  }
+
   .logo-main {
     font-size: 1.75rem;
   }
@@ -494,8 +528,9 @@
     gap: 24px;
   }
 
-  .logo-icon {
-    font-size: 3rem;
+  .logo-image {
+    width: 60px;
+    height: 60px;
   }
 
   .logo-main {

@@ -1,4 +1,4 @@
-/* src/styles/filterbar.css */
+/* src/styles/FilterBar.css */
 
 .filter-bar {
   display: flex;
@@ -15,56 +15,59 @@
   border-radius: 8px;
   flex: 1 1 100%;
   background-color: #fff;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* Custom select */
-.custom-select {
-  position: relative;
-  flex: 1 1 100%;
+.filter-bar input:focus {
+  outline: none;
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
 }
 
-.select-toggle {
+/* Price Select */
+.price-select {
   width: 100%;
   padding: 10px 14px;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #fff;
-  text-align: left;
   cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
 }
 
-.select-options {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  z-index: 10;
-  max-height: 220px;
-  overflow-y: auto;
+.price-select:hover {
+  border-color: #999;
 }
 
-.select-options li {
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  cursor: pointer;
+.price-select:focus {
+  outline: none;
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
 }
 
-.select-options li:hover {
-  background-color: #f0f0f0;
-}
-
+/* Clear button */
 .clear-filter-icon {
   font-size: 1.4rem;
   padding: 8px;
-  color: #d53f8c;
+  color: #ec4899;
   background: none;
   border: none;
   cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.clear-filter-icon:hover {
+  transform: scale(1.1);
+}
+
+.clear-filter-icon:active {
+  transform: scale(0.95);
 }
 
 /* Mobile layout */
@@ -75,14 +78,11 @@
     gap: 16px;
   }
 
-  .select-toggle,
-  .filter-bar input {
+  .filter-bar input,
+  .price-select {
     font-size: 1rem;
     padding: 12px;
-  }
-
-  .select-options li {
-    font-size: 1rem;
+    flex: 1 1 auto;
   }
 
   .clear-filter-icon {
@@ -104,11 +104,8 @@
     padding: 10px 14px;
   }
 
-  .custom-select {
+  .price-select {
     flex: 0 0 240px;
-  }
-
-  .select-toggle {
     font-size: 1rem;
     padding: 10px 14px;
   }
