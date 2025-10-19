@@ -357,13 +357,13 @@
     background-position: center;
   }
 
-  .category-header-overlay {
+  /* .category-header-overlay {
     background: linear-gradient(
       180deg,
       rgba(0, 0, 0, 0.6) 0%,
       rgba(0, 0, 0, 0.4) 100%
     );
-  }
+  } */
 
   .category-header-content {
     grid-template-columns: 1fr;
