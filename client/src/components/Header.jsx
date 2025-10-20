@@ -104,7 +104,6 @@ const Header = ({ cartCount = 0 }) => {
           {/* Desktop Navigation */}
           <nav className="header-nav" role="navigation" aria-label="Primary">
             <Link to="/" className="nav-link">
-              <span className="icon">🏠</span>
               Trang Chủ
             </Link>
 
@@ -118,7 +117,6 @@ const Header = ({ cartCount = 0 }) => {
                 aria-expanded={categoryMenuOpen}
                 onClick={() => setCategoryMenuOpen(prev => !prev)}
               >
-                <span className="icon">🌺</span>
                 Danh Mục Hoa
                 <span className="arrow">▾</span>
               </button>
@@ -126,17 +124,17 @@ const Header = ({ cartCount = 0 }) => {
               <ul className={`dropdown-menu ${categoryMenuOpen ? 'open' : ''}`}>
                 <li>
                   <Link to="/category/khai-truong" className="dropdown-link">
-                    🎉 Hoa Khai Trương
+                    Hoa Khai Trương
                   </Link>
                 </li>
                 <li>
                   <Link to="/category/sinh-nhat" className="dropdown-link">
-                    🎂 Hoa Sinh Nhật
+                    Hoa Sinh Nhật
                   </Link>
                 </li>
                 <li>
                   <Link to="/category/tang-le" className="dropdown-link">
-                    🕯️ Hoa Tang Lễ
+                    Hoa Tang Lễ
                   </Link>
                 </li>
               </ul>
@@ -152,7 +150,6 @@ const Header = ({ cartCount = 0 }) => {
                   aria-expanded={submenuOpen}
                   onClick={() => setSubmenuOpen(prev => !prev)}
                 >
-                  <span className="icon">⚙️</span>
                   Quản Trị
                   <span className="arrow">▾</span>
                 </button>
@@ -160,17 +157,17 @@ const Header = ({ cartCount = 0 }) => {
                 <ul className={`dropdown-menu ${submenuOpen ? 'open' : ''}`}>
                   <li>
                     <Link to="/admin/import" className="dropdown-link">
-                      📤 Import sản phẩm
+                      Import sản phẩm
                     </Link>
                   </li>
                   <li>
                     <Link to="/admin-orders" className="dropdown-link">
-                      📋 Quản lý đơn hàng
+                      Quản lý đơn hàng
                     </Link>
                   </li>
                   <li>
                     <button className="dropdown-link" onClick={handleLogout}>
-                      🚪 Đăng xuất
+                      Đăng xuất
                     </button>
                   </li>
                 </ul>
@@ -178,7 +175,6 @@ const Header = ({ cartCount = 0 }) => {
             )}
 
             <Link to="/contact" className="nav-link">
-              <span className="icon">📞</span>
               Liên Hệ
             </Link>
           </nav>
@@ -226,7 +222,7 @@ const Header = ({ cartCount = 0 }) => {
             className="sidebar-link"
             onClick={handleMobileLinkClick}
           >
-            🏠 Trang Chủ
+            Trang Chủ
           </Link>
 
           {/* Mobile Danh Mục Dropdown */}
@@ -236,7 +232,7 @@ const Header = ({ cartCount = 0 }) => {
               onClick={() => setMobileCategoryOpen(prev => !prev)}
               aria-expanded={mobileCategoryOpen}
             >
-              🌺 Danh Mục Hoa
+              Danh Mục Hoa
               <span className={`arrow ${mobileCategoryOpen ? 'open' : ''}`}>▾</span>
             </button>
 
@@ -248,7 +244,7 @@ const Header = ({ cartCount = 0 }) => {
                     className="sidebar-sublink"
                     onClick={handleMobileLinkClick}
                   >
-                    🎉 Hoa Khai Trương
+                    Hoa Khai Trương
                   </Link>
                 </li>
                 <li>
@@ -257,7 +253,7 @@ const Header = ({ cartCount = 0 }) => {
                     className="sidebar-sublink"
                     onClick={handleMobileLinkClick}
                   >
-                    🎂 Hoa Sinh Nhật
+                    Hoa Sinh Nhật
                   </Link>
                 </li>
                 <li>
@@ -266,7 +262,7 @@ const Header = ({ cartCount = 0 }) => {
                     className="sidebar-sublink"
                     onClick={handleMobileLinkClick}
                   >
-                    🕯️ Hoa Tang Lễ
+                    Hoa Tang Lễ
                   </Link>
                 </li>
               </ul>
@@ -281,7 +277,7 @@ const Header = ({ cartCount = 0 }) => {
                 onClick={() => setMobileAdminOpen(prev => !prev)}
                 aria-expanded={mobileAdminOpen}
               >
-                ⚙️ Quản Trị
+                Quản Trị
                 <span className={`arrow ${mobileAdminOpen ? 'open' : ''}`}>▾</span>
               </button>
 
@@ -293,7 +289,7 @@ const Header = ({ cartCount = 0 }) => {
                       className="sidebar-sublink"
                       onClick={handleMobileLinkClick}
                     >
-                      📤 Import sản phẩm
+                      Import sản phẩm
                     </Link>
                   </li>
                   <li>
@@ -302,7 +298,7 @@ const Header = ({ cartCount = 0 }) => {
                       className="sidebar-sublink"
                       onClick={handleMobileLinkClick}
                     >
-                      📋 Quản lý đơn hàng
+                      Quản lý đơn hàng
                     </Link>
                   </li>
                   <li>
@@ -313,7 +309,7 @@ const Header = ({ cartCount = 0 }) => {
                         handleLogout();
                       }}
                     >
-                      🚪 Đăng xuất
+                      Đăng xuất
                     </button>
                   </li>
                 </ul>
@@ -327,7 +323,7 @@ const Header = ({ cartCount = 0 }) => {
             className="sidebar-link"
             onClick={handleMobileLinkClick}
           >
-            📞 Liên Hệ
+            Liên Hệ
           </Link>
         </nav>
       </aside>

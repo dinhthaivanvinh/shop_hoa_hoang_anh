@@ -46,11 +46,10 @@ const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
         {cartItems.length === 0 ? (
           /* Empty Cart */
           <div className="empty-cart">
-            <div className="empty-cart-icon">🌸</div>
+            <div className="empty-cart-icon"></div>
             <h3>Giỏ hàng của bạn đang trống</h3>
             <p>Hãy khám phá các sản phẩm tuyệt vời của chúng tôi!</p>
             <button className="continue-shopping-btn" onClick={handleContinueShopping}>
-              <span className="btn-icon">🌺</span>
               Tiếp tục mua sắm
             </button>
           </div>
@@ -114,10 +113,6 @@ const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
                   </button>
 
                   <div className="cart-features">
-                    <div className="feature-item">
-                      <span className="feature-icon">✅</span>
-                      <span>Miễn phí đổi trả trong 7 ngày</span>
-                    </div>
                     <div className="feature-item">
                       <span className="feature-icon">🚚</span>
                       <span>Giao hàng nhanh 2-4 giờ</span>

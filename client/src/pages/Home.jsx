@@ -123,7 +123,6 @@ const Home = ({ addToCart }) => {
       {/* Filter Bar */}
       <div className="container">
         <div className="filter-section">
-          <h2 className="filter-section-title">🔍 Tìm Kiếm Sản Phẩm</h2>
           <FilterBar
             key={`home-filter-${resetSignal}`}
             onFilterChange={handleFilterChange}
@@ -150,7 +149,7 @@ const Home = ({ addToCart }) => {
         ) : (
               Object.entries(productData).map(([slug, { label, products }]) => (
             <section key={slug} className="category-section">
-              <SectionHeader title={`🌸 ${label}`} link={`/category/${slug}`} />
+                  <SectionHeader title={`${label}`} link={`/category/${slug}`} />
               <ProductGrid products={products} addToCart={addToCart} />
             </section>
           ))

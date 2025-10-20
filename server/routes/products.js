@@ -96,17 +96,12 @@ router.get('/home', async (req, res) => {
 
     const result = {};
 
-    console.log('🔍 Truy vấn danh mục có sản phẩm...');
-    console.log('📊 Filters:', { name, minPrice, maxPrice });
-
     // Lấy danh sách categories có sản phẩm
     const [categories] = await db.execute(`
       SELECT DISTINCT p.category_id, c.name 
       FROM products p 
       JOIN categories c ON p.category_id = c.id
     `);
-
-    console.log('📦 Danh mục:', categories);
 
     // Với mỗi danh mục, lấy sản phẩm có filter
     await Promise.all(categories.map(async ({ category_id, name: categoryName }) => {
@@ -154,8 +149,6 @@ router.get('/home', async (req, res) => {
         };
       }
     }));
-
-    console.log('✅ Kết quả:', Object.keys(result).length, 'categories');
 
     res.json(result);
 

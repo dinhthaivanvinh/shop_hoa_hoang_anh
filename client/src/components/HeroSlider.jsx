@@ -1,6 +1,6 @@
 // src/components/HeroSlider.jsx
 import React, { useState, useEffect } from 'react';
-import '../style/HeroSlider.css';
+import '../style/HeroSlider.css'
 
 const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -8,17 +8,20 @@ const HeroSlider = () => {
   const slides = [
     {
       id: 1,
-      image: '/images/1.jpg', // Thay bằng đường dẫn thực tế của bạn
+      desktop: '/images/1.jpg',
+      mobile: '/images/1-mb.jpg',
       alt: 'Shop Hoa Hoàng Anh - Giao hàng toàn quốc'
     },
     {
       id: 2,
-      image: '/images/2.jpg',
+      desktop: '/images/2.jpg',
+      mobile: '/images/2-mb.jpg',
       alt: 'Cung cấp hoa tươi - Miễn phí giao nội thành'
     },
     {
       id: 3,
-      image: '/images/3.jpg',
+      desktop: '/images/3.jpg',
+      mobile: '/images/3-mb.jpg',
       alt: 'Biến mọi dịp trở nên đặc biệt'
     }
   ];
@@ -54,7 +57,24 @@ const HeroSlider = () => {
         >
           {slides.map((slide) => (
             <div key={slide.id} className="slide">
-              <img src={slide.image} alt={slide.alt} />
+              <picture>
+                {/* Mobile: màn hình < 768px */}
+                <source
+                  media="(max-width: 767px)"
+                  srcSet={slide.mobile}
+                />
+                {/* Desktop: màn hình >= 768px */}
+                <source
+                  media="(min-width: 768px)"
+                  srcSet={slide.desktop}
+                />
+                {/* Fallback cho trình duyệt không hỗ trợ <picture> */}
+                <img
+                  src={slide.desktop}
+                  alt={slide.alt}
+                  loading="lazy"
+                />
+              </picture>
             </div>
           ))}
         </div>

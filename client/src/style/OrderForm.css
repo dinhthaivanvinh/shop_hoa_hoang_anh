@@ -1,0 +1,379 @@
+/* src/style/OrderForm.css */
+
+/* ============================================
+   FORM CONTAINER
+   ============================================ */
+
+.order-form-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ============================================
+   FORM HEADER
+   ============================================ */
+
+.form-header {
+  margin-bottom: 8px;
+}
+
+.form-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-icon {
+  font-size: 1.5rem;
+}
+
+.form-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ============================================
+   FORM GROUP
+   ============================================ */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label-icon {
+  font-size: 1.1rem;
+}
+
+.required {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+/* ============================================
+   FORM INPUTS
+   ============================================ */
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  color: #1f2937;
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.3s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #D291BC;
+  box-shadow: 0 0 0 3px rgba(210, 145, 188, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.form-input:disabled,
+.form-textarea:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Error state */
+.form-input.error,
+.form-textarea.error {
+  border-color: #ef4444;
+}
+
+.form-input.error:focus,
+.form-textarea.error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Error Message */
+.error-message {
+  font-size: 0.875rem;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: -4px;
+}
+
+.error-message::before {
+  content: '⚠️';
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   TEXTAREA
+   ============================================ */
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+/* ============================================
+   SUBMIT BUTTON
+   ============================================ */
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #D291BC 0%, #C076A8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 8px;
+  box-shadow: 0 4px 12px rgba(210, 145, 188, 0.3);
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(210, 145, 188, 0.4);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.submit-btn.submitting {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+/* Button Spinner */
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   FORM NOTE
+   ============================================ */
+
+.form-note {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.note-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.form-note p {
+  font-size: 0.9rem;
+  color: #78350f;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.form-note strong {
+  font-weight: 700;
+  color: #92400e;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+
+@media (max-width: 768px) {
+  .order-form-container {
+    padding: 20px;
+  }
+
+  .form-title {
+    font-size: 1.125rem;
+  }
+
+  .form-icon {
+    font-size: 1.25rem;
+  }
+
+  .form-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: 11px 14px;
+    font-size: 0.95rem;
+  }
+
+  .submit-btn {
+    padding: 13px 20px;
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
+@media (max-width: 480px) {
+  .order-form-container {
+    padding: 16px;
+  }
+
+  .order-form {
+    gap: 16px;
+  }
+
+  .form-title {
+    font-size: 1rem;
+  }
+
+  .form-icon {
+    font-size: 1.15rem;
+  }
+
+  .form-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .form-label {
+    font-size: 0.875rem;
+  }
+
+  .label-icon {
+    font-size: 1rem;
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .form-textarea {
+    min-height: 80px;
+  }
+
+  .error-message {
+    font-size: 0.8rem;
+  }
+
+  .submit-btn {
+    padding: 12px 18px;
+    font-size: 0.95rem;
+  }
+
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  .form-note {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .note-icon {
+    font-size: 1.1rem;
+  }
+
+  .form-note p {
+    font-size: 0.85rem;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.form-input:focus-visible,
+.form-textarea:focus-visible,
+.submit-btn:focus-visible {
+  outline: 2px solid #D291BC;
+  outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .form-input,
+  .form-textarea {
+    border-width: 3px;
+  }
+
+  .submit-btn {
+    border: 2px solid #1f2937;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .form-input,
+  .form-textarea,
+  .submit-btn {
+    transition: none;
+  }
+
+  .btn-spinner {
+    animation: none;
+  }
+}

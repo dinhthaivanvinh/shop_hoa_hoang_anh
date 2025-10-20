@@ -77,20 +77,12 @@ const Layout = ({ children, cartCount }) => {
             <div className="footer-section">
               <h3>Liên Hệ</h3>
               <p>
-                <strong>Địa chỉ:</strong><br />
-                123 Đường Lê Duẩn, Huế, Việt Nam
-              </p>
-              <p>
                 <strong>Hotline:</strong><br />
                 <a href="tel:0123456789">0123 456 789</a>
               </p>
               <p>
                 <strong>Email:</strong><br />
                 <a href="mailto:shophoahoanganh@gmail.com">shophoahoanganh@gmail.com</a>
-              </p>
-              <p>
-                <strong>Giờ mở cửa:</strong><br />
-                Thứ 2 - Chủ Nhật: 7:00 - 21:00
               </p>
             </div>
           </div>

@@ -39,25 +39,16 @@ function App() {
         return [...prev, { ...product, quantity: 1 }];
       }
     });
-
-    toast.success('✅ Đã thêm vào giỏ!', {
-      position: 'top-right',
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true
-    });
   };
 
   const removeFromCart = (id) => {
     setCartItems(prev => prev.filter(item => item.id !== id));
-    toast.info('🗑️ Đã xóa khỏi giỏ hàng', {autoClose: 1000});
+    toast.info('Đã xóa khỏi giỏ hàng', { autoClose: 1000 });
   };
 
   const clearCart = () => {
     setCartItems([]);
-    toast.info('🧹 Đã xóa toàn bộ giỏ hàng!', {autoClose: 1000});
+    toast.info('Đã xóa toàn bộ giỏ hàng!', { autoClose: 1000 });
   };
 
   const updateQuantity = (id, newQty) => {

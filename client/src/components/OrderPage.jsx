@@ -27,7 +27,6 @@ const OrderPage = ({ cartItems, clearCart }) => {
           <h2>Giỏ hàng trống</h2>
           <p>Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
           <button className="back-to-shop-btn" onClick={() => navigate('/')}>
-            <span className="btn-icon">🌸</span>
             Tiếp tục mua sắm
           </button>
         </div>
@@ -105,10 +104,6 @@ const OrderPage = ({ cartItems, clearCart }) => {
 
               {/* Features */}
               <div className="order-features">
-                <div className="feature-item">
-                  <span className="feature-icon">✅</span>
-                  <span>Miễn phí đổi trả trong 7 ngày</span>
-                </div>
                 <div className="feature-item">
                   <span className="feature-icon">🚚</span>
                   <span>Giao hàng nhanh 2-4 giờ</span>

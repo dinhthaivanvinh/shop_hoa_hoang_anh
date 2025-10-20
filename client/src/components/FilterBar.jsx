@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import '../style/FilterBar.css';
 
 const priceOptions = [
-  { value: '', label: '-- Khoảng giá --' },
+  { value: '', label: 'Khoảng giá' },
   { value: 'under500', label: 'Dưới 500.000₫' },
   { value: '500to700', label: '500.000₫ - 700.000₫' },
   { value: '700to1000', label: '700.000₫ - 1.000.000₫' },
@@ -147,7 +147,7 @@ const FilterBar = ({ onFilterChange, initialSearch = '', initialPrice = '', rese
       <input
         ref={inputRef}
         type="text"
-        placeholder="🔍 Tìm sản phẩm..."
+        placeholder="Tìm sản phẩm..."
         value={searchText}
         onChange={handleSearchChange}
         autoComplete="off"

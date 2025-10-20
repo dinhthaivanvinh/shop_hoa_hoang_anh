@@ -65,11 +65,7 @@ const CategoryPage = ({ addToCart }) => {
   };
 
   const selectedCategoryTitle = categoryTitleMap[categorySlug];
-  const categoryIcon = categoryIconMap[categorySlug] || '🌸';
-  const categoryDesc = categoryDescMap[categorySlug] || '';
-  const categorySubtitle = categorySubtitleMap[categorySlug] || '';
   const categoryBanner = categoryBannerMap[categorySlug];
-  const categoryZalo = categoryZaloMap[categorySlug] || '';
   const title = selectedCategoryTitle.replace(/([A-Z])/g, ' $1').trim();
 
   const [page, setPage] = useState(1);
@@ -205,9 +201,6 @@ const CategoryPage = ({ addToCart }) => {
       <div className="category-content">
         <div className="container">
           <div className="category-filter-section">
-            <h2 className="filter-section-title">
-              🔍 Tìm Kiếm Sản Phẩm
-            </h2>
             <FilterBar
               key={`filter-${categorySlug}-${resetSignal}`}
               onFilterChange={handleFilterChange}
