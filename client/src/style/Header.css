@@ -96,7 +96,7 @@
 
 /* Logo Image - MỚI */
 .logo-image {
-  width: 150px;
+  width: 100%;
   height: 50px;
   object-fit: contain;
   border-radius: 8px;
@@ -282,7 +282,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
-  background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+  background: linear-gradient(135deg, #d2aec0, #d368b7);
   color: #fff;
   text-decoration: none;
   border-radius: 24px;
@@ -489,8 +489,8 @@
   }
 
   .logo-image {
-    width: 55px;
-    height: 55px;
+    width: 100%;
+    height: 70px;
   }
 
   .logo-main {
