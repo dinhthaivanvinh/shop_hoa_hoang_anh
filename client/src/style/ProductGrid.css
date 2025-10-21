@@ -46,8 +46,8 @@
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr); /* Default: 3 columns for mobile */
+  gap: 12px;
   animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -66,10 +66,35 @@
    RESPONSIVE
    ============================================ */
 
-/* Mobile - 2 columns with horizontal layout */
-@media (max-width: 480px) {
+/* Extra Small Mobile (< 375px) - 2 columns */
+@media (max-width: 374px) {
   .product-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .grid-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .grid-title {
+    font-size: 1.25rem;
+  }
+
+  .grid-count {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
+}
+
+/* Small Mobile (375px - 480px) - 3 columns */
+@media (min-width: 375px) and (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
 
@@ -80,18 +105,30 @@
   }
 
   .grid-title {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
 
   .grid-count {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
   }
 }
 
-/* Small tablet - 3 columns */
-@media (min-width: 481px) and (max-width: 768px) {
+/* Large Mobile (481px - 640px) - 3 columns */
+@media (min-width: 481px) and (max-width: 640px) {
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .grid-title {
+    font-size: 1.45rem;
+  }
+}
+
+/* Small Tablet (641px - 768px) - 4 columns */
+@media (min-width: 641px) and (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
   }
 
@@ -100,23 +137,35 @@
   }
 }
 
-/* Tablet - 4 columns */
+/* Tablet (769px - 1023px) - 4 columns */
 @media (min-width: 769px) and (max-width: 1023px) {
   .product-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 18px;
   }
+
+  .grid-title {
+    font-size: 1.6rem;
+  }
 }
 
-/* Small Desktop & Laptop - 5 columns (1024px and up) */
-@media (min-width: 1024px) {
+/* Small Desktop & Laptop (1024px - 1279px) - 5 columns */
+@media (min-width: 1024px) and (max-width: 1279px) {
   .product-grid {
     grid-template-columns: repeat(5, 1fr);
     gap: 18px;
   }
 }
 
-/* Large desktop - 5 columns with more gap */
+/* Desktop (1280px - 1399px) - 5 columns */
+@media (min-width: 1280px) and (max-width: 1399px) {
+  .product-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Large Desktop (≥ 1400px) - 5 columns with more gap */
 @media (min-width: 1400px) {
   .product-grid {
     grid-template-columns: repeat(5, 1fr);

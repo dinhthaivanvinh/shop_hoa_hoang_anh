@@ -28,10 +28,6 @@ const Layout = ({ children, cartCount }) => {
                   alt="Hoàng Anh Logo"
                   className="footer-logo-image"
                 />
-                <div className="footer-logo-text">
-                  <span className="footer-logo-main">Hoàng Anh</span>
-                  <span className="footer-logo-sub">Hoa tươi mỗi ngày</span>
-                </div>
               </div>
               <p>
                 Shop hoa tươi uy tín với hơn 10 năm kinh nghiệm.

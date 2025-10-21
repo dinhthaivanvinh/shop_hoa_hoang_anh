@@ -95,10 +95,6 @@ const Header = ({ cartCount = 0 }) => {
               alt="Shop Hoa Hoàng Anh Logo"
               className="logo-image"
             />
-            <span className="logo-text">
-              <span className="logo-main">Shop Hoa Hoàng Anh</span>
-              <span className="logo-sub">Tươi đẹp mỗi ngày</span>
-            </span>
           </Link>
 
           {/* Desktop Navigation */}

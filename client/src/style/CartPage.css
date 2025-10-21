@@ -68,6 +68,11 @@
   opacity: 0.5;
 }
 
+.empty-cart-icon-svg {
+  opacity: .1;
+  height: 80px;
+}
+
 .empty-cart h3 {
   font-size: 1.5rem;
   font-weight: 700;
@@ -603,6 +608,11 @@
 
   .empty-cart-icon {
     font-size: 4rem;
+  }
+
+  .empty-cart-icon-svg {
+    opacity: .1;
+    height: 80px;
   }
 
   .empty-cart h3 {

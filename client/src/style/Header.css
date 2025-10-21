@@ -96,7 +96,7 @@
 
 /* Logo Image - MỚI */
 .logo-image {
-  width: 50px;
+  width: 150px;
   height: 50px;
   object-fit: contain;
   border-radius: 8px;
@@ -529,8 +529,8 @@
   }
 
   .logo-image {
-    width: 60px;
-    height: 60px;
+    width: 100%;
+    height: 85px;
   }
 
   .logo-main {

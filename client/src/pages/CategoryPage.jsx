@@ -9,10 +9,16 @@ import axiosClient from '../utils/axiosClient';
 import { useFilter } from '../context/FilterContext';
 import '../style/CategoryPage.css';
 
-// Import banner images
-import bannerKhaiTruong from '../assets/banners/khai-truong-banner.jpg';
-import bannerSinhNhat from '../assets/banners/sinh-nhat-banner.jpg';
-import bannerTangLe from '../assets/banners/tang-le-banner.jpg';
+// Import banner images - DESKTOP (4500x1125 - 4:1 ratio)
+import bannerKhaiTruongDesktop from '../assets/banners/khai-truong-banner.jpg';
+import bannerSinhNhatDesktop from '../assets/banners/sinh-nhat-banner.jpg';
+import bannerTangLeDesktop from '../assets/banners/tang-le-banner.jpg';
+
+// Import banner images - MOBILE (chưa có, bạn cần thêm vào)
+// Kích thước đề xuất: 1080x1080 (1:1) hoặc 1080x1350 (4:5)
+import bannerKhaiTruongMobile from '../assets/banners/khai-truong-banner-mb.jpg';
+import bannerSinhNhatMobile from '../assets/banners/sinh-nhat-banner-mb.jpg';
+import bannerTangLeMobile from '../assets/banners/tang-le-banner-mb.jpg';
 
 // Helper function to convert filters to price range string
 const getPriceRangeValue = (minPrice, maxPrice) => {
@@ -34,38 +40,23 @@ const CategoryPage = ({ addToCart }) => {
     'tang-le': CategoryTitle.TangLe
   };
 
-  const categoryIconMap = {
-    'sinh-nhat': '🎂',
-    'khai-truong': '🎉',
-    'tang-le': '🕯️'
+  // Banner maps for DESKTOP
+  const categoryBannerDesktopMap = {
+    'sinh-nhat': bannerSinhNhatDesktop,
+    'khai-truong': bannerKhaiTruongDesktop,
+    'tang-le': bannerTangLeDesktop
   };
 
-  const categoryDescMap = {
-    'sinh-nhat': 'Thêm tươi, thêm yêu đời',
-    'khai-truong': 'Hoa Khai Trương',
-    'tang-le': 'Hoa nói thay lời vĩnh biệt'
-  };
-
-  const categorySubtitleMap = {
-    'sinh-nhat': 'Hoa Sinh Nhật',
-    'khai-truong': 'SHOP NOW!',
-    'tang-le': 'HOA Tang Lễ'
-  };
-
-  const categoryBannerMap = {
-    'sinh-nhat': bannerSinhNhat,
-    'khai-truong': bannerKhaiTruong,
-    'tang-le': bannerTangLe
-  };
-
-  const categoryZaloMap = {
-    'sinh-nhat': 'ZALO: 0378776399',
-    'khai-truong': 'ZALO: 0378776399',
-    'tang-le': 'ZALO: 0378776399'
+  // Banner maps for MOBILE
+  const categoryBannerMobileMap = {
+    'sinh-nhat': bannerSinhNhatMobile,
+    'khai-truong': bannerKhaiTruongMobile,
+    'tang-le': bannerTangLeMobile
   };
 
   const selectedCategoryTitle = categoryTitleMap[categorySlug];
-  const categoryBanner = categoryBannerMap[categorySlug];
+  const bannerDesktop = categoryBannerDesktopMap[categorySlug];
+  const bannerMobile = categoryBannerMobileMap[categorySlug];
   const title = selectedCategoryTitle.replace(/([A-Z])/g, ' $1').trim();
 
   const [page, setPage] = useState(1);
@@ -175,26 +166,26 @@ const CategoryPage = ({ addToCart }) => {
 
   return (
     <div className="category-page">
-      {/* Category Header with Banner Image */}
-      <div
-        className={`category-header category-header-${categorySlug}`}
-        style={{
-          backgroundImage: !imageError && categoryBanner
-            ? `url(${categoryBanner})`
-            : 'none'
-        }}
-      >
-        <div className="category-header-overlay"></div>
-
-        {imageError && (
+      {/* Category Header with Responsive Banner */}
+      <div className={`category-header category-header-${categorySlug}`}>
+        {/* Picture element for responsive images */}
+        <picture className="category-banner-picture">
+          {/* Mobile banner (≤768px) */}
+          <source
+            media="(max-width: 768px)"
+            srcSet={bannerMobile}
+          />
+          {/* Desktop banner (>768px) */}
           <img
-            src={categoryBanner}
+            src={bannerDesktop}
             alt={`${title} banner`}
-            className="category-banner-fallback"
-            style={{ display: 'none' }}
+            className="category-banner-image"
             onError={() => setImageError(true)}
           />
-        )}
+        </picture>
+
+        {/* Overlay */}
+        <div className="category-header-overlay"></div>
       </div>
 
       {/* Filter Bar */}
@@ -217,7 +208,7 @@ const CategoryPage = ({ addToCart }) => {
               <p>Đang tìm kiếm...</p>
             </div>
           ) : products.length === 0 ? (
-          /* No Products */
+              /* No Products */
             <div className="no-products">
               <div className="no-products-icon">🔍</div>
               <h3>Không tìm thấy sản phẩm</h3>

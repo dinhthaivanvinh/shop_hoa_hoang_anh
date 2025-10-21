@@ -106,31 +106,61 @@
 }
 
 /* ============================================
-   CATEGORY HEADER WITH BANNER
+   CATEGORY HEADER WITH RESPONSIVE BANNER
    ============================================ */
 
 .category-header {
   position: relative;
   width: 100%;
-  /* Maintain 4:1 aspect ratio (4500:1125 = 4:1) */
-  padding-top: 25%; /* 1125/4500 = 0.25 = 25% */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  margin-bottom: 48px;
   overflow: hidden;
+  margin-bottom: 32px;
 }
 
-/* Inner content wrapper with absolute positioning */
-.category-header > * {
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Banner Picture Container */
+.category-banner-picture {
+  display: block;
   width: 100%;
   height: 100%;
 }
 
-/* Fallback gradient for each category */
+/* Banner Image */
+.category-banner-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Desktop: 4:1 aspect ratio (4500x1125) */
+@media (min-width: 769px) {
+  .category-header {
+    aspect-ratio: 4 / 1;
+  }
+  
+  .category-banner-image {
+    object-position: center;
+  }
+}
+
+/* Mobile: 1:1 aspect ratio (1080x1080) hoặc tùy ảnh của bạn */
+@media (max-width: 768px) {
+  .category-banner-image {
+    object-position: center;
+  }
+  
+  .category-header {
+    margin-bottom: 24px;
+  }
+}
+
+/* Extra small mobile */
+@media (max-width: 480px) {
+  .category-header {
+    margin-bottom: 20px;
+  }
+}
+
+/* Fallback gradient cho từng category (khi ảnh không load được) */
 .category-header-khai-truong {
   background-color: #F5EDE4;
 }
@@ -143,129 +173,19 @@
   background-color: #E8E3DD;
 }
 
-/* Dark overlay for better text readability */
+/* Overlay (optional - tắt đi nếu không cần) */
 .category-header-overlay {
   position: absolute;
   inset: 0;
+  background: transparent;
+  /* Nếu muốn overlay tối: */
   /* background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.5) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
-    transparent 100%
+    180deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 100%
   ); */
   z-index: 1;
-}
-
-.category-header-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  left: 50%;
-  transform: translateX(-50%);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
-  padding: 0 48px;
-  z-index: 2;
-}
-
-/* Left side - Text content */
-.category-banner-text {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.category-icon-wrapper {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  backdrop-filter: blur(10px);
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.category-icon {
-  font-size: 2.5rem;
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.category-info {
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.category-subtitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.category-title {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 16px;
-  line-height: 1.2;
-  color: #fff;
-}
-
-.category-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.stat-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.25);
-  padding: 10px 20px;
-  border-radius: 24px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  width: fit-content;
-}
-
-.stat-zalo {
-  font-size: 1.125rem;
-  background: rgba(255, 255, 255, 0.9);
-  color: #2D1B2E;
-  text-shadow: none;
-}
-
-/* Right side - Banner preview images */
-.category-banner-preview {
-  display: none; /* Hidden by default, shown on larger screens */
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.banner-preview-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
 }
 
 /* ============================================
@@ -274,6 +194,10 @@
 
 .category-content {
   padding-bottom: 64px;
+}
+
+.category-filter-section {
+  margin-bottom: 32px;
 }
 
 /* ============================================
@@ -328,22 +252,12 @@
    ============================================ */
 
 @media (min-width: 769px) and (max-width: 1024px) {
-  .category-header {
-    padding-top: 30%; /* Slightly taller for better mobile view */
+  .category-content {
+    padding-bottom: 48px;
   }
 
-  .category-header-content {
-    grid-template-columns: 1fr;
-    gap: 32px;
-    padding: 0 32px;
-  }
-
-  .category-title {
-    font-size: 2.5rem;
-  }
-
-  .category-subtitle {
-    font-size: 1.25rem;
+  .pagination-wrapper {
+    margin-top: 40px;
   }
 }
 
@@ -352,59 +266,28 @@
    ============================================ */
 
 @media (max-width: 768px) {
-  .category-header {
-    padding-top: 50%; /* 2:1 ratio for mobile - better UX */
-    background-position: center;
+  .category-content {
+    padding-bottom: 48px;
   }
 
-  /* .category-header-overlay {
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.6) 0%,
-      rgba(0, 0, 0, 0.4) 100%
-    );
-  } */
-
-  .category-header-content {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 24px 16px;
-    justify-content: center;
+  .category-filter-section {
+    margin-bottom: 24px;
   }
 
-  .category-banner-text {
-    gap: 16px;
+  .no-products {
+    padding: 48px 24px;
   }
 
-  .category-icon-wrapper {
-    width: 60px;
-    height: 60px;
+  .no-products-icon {
+    font-size: 3rem;
   }
 
-  .category-icon {
-    font-size: 2rem;
+  .no-products h3 {
+    font-size: 1.25rem;
   }
 
-  .category-subtitle {
-    font-size: 1rem;
-    letter-spacing: 1px;
-  }
-
-  .category-title {
-    font-size: 1.75rem;
-  }
-
-  .category-stats {
-    gap: 8px;
-  }
-
-  .stat-item {
-    font-size: 0.875rem;
-    padding: 8px 16px;
-  }
-
-  .stat-zalo {
-    font-size: 0.95rem;
+  .no-products p {
+    font-size: 0.9rem;
   }
 
   .pagination-wrapper {
@@ -413,25 +296,24 @@
 }
 
 @media (max-width: 480px) {
-  .category-header {
-    padding-top: 60%; /* Even taller for very small screens */
+  .container {
+    padding: 0 12px;
   }
 
-  .category-header-content {
-    padding: 16px 12px;
+  .category-content {
+    padding-bottom: 32px;
   }
 
-  .category-title {
-    font-size: 1.5rem;
+  .category-filter-section {
+    margin-bottom: 20px;
   }
 
-  .category-subtitle {
-    font-size: 0.9rem;
+  .no-products {
+    padding: 40px 20px;
   }
 
-  .stat-item {
-    font-size: 0.8rem;
-    padding: 6px 12px;
+  .pagination-wrapper {
+    margin-top: 24px;
   }
 }
 
@@ -440,20 +322,12 @@
    ============================================ */
 
 @media (min-width: 1025px) {
-  .category-banner-preview {
-    display: flex;
+  .category-content {
+    padding-bottom: 80px;
   }
 
-  .category-header {
-    padding-top: 25%; /* Maintain 4:1 ratio */
-  }
-
-  .category-title {
-    font-size: 3.5rem;
-  }
-
-  .category-header-content {
-    padding: 0 48px;
+  .pagination-wrapper {
+    margin-top: 56px;
   }
 }
 
@@ -463,7 +337,6 @@
 
 @media (min-width: 1920px) {
   .category-header {
-    padding-top: 23.4375%; /* Exact 4:1 ratio for ultra-wide */
-    max-height: 600px; /* Limit maximum height */
+    max-height: 600px;
   }
 }
