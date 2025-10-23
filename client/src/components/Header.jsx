@@ -3,60 +3,48 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext';
 import '../style/Header.css';
-import logoImage from '../assets/logo.png'; // 👈 Import logo
+import logoImage from '../assets/logo.png';
 
 const Header = ({ cartCount = 0 }) => {
   const { isAdmin, setIsAdmin } = useContext(AdminContext);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false);
-  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
 
-  // Separate state for mobile dropdowns
+  // Desktop hover state
+  const [categoryHoverOpen, setCategoryHoverOpen] = useState(false);
+  const [adminHoverOpen, setAdminHoverOpen] = useState(false);
+
+  // Mobile click state
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
   const [mobileAdminOpen, setMobileAdminOpen] = useState(false);
 
   const navigate = useNavigate();
-  const dropdownRef = useRef();
-  const categoryRef = useRef();
   const location = useLocation();
+  const categoryRef = useRef();
+  const adminRef = useRef();
 
   // Close all menus when route changes
   useEffect(() => {
     setMenuOpen(false);
-    setSubmenuOpen(false);
-    setCategoryMenuOpen(false);
+    setCategoryHoverOpen(false);
+    setAdminHoverOpen(false);
     setMobileCategoryOpen(false);
     setMobileAdminOpen(false);
   }, [location.pathname]);
 
-  // Handle click outside for desktop dropdowns
+  // Handle Escape key
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setSubmenuOpen(false);
-      }
-      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
-        setCategoryMenuOpen(false);
-      }
-    };
-
     const handleKey = (e) => {
       if (e.key === 'Escape') {
         setMenuOpen(false);
-        setSubmenuOpen(false);
-        setCategoryMenuOpen(false);
+        setCategoryHoverOpen(false);
+        setAdminHoverOpen(false);
         setMobileCategoryOpen(false);
         setMobileAdminOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleKey);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKey);
-    };
+    return () => document.removeEventListener('keydown', handleKey);
   }, []);
 
   const handleLogout = () => {
@@ -65,7 +53,6 @@ const Header = ({ cartCount = 0 }) => {
     navigate('/');
   };
 
-  // Handler to close sidebar when clicking on links
   const handleMobileLinkClick = () => {
     setMenuOpen(false);
     setMobileCategoryOpen(false);
@@ -74,7 +61,6 @@ const Header = ({ cartCount = 0 }) => {
 
   return (
     <header className="header">
-      {/* Main Header */}
       <div className="header-main">
         <div className="header-container">
           {/* Mobile hamburger */}
@@ -88,7 +74,7 @@ const Header = ({ cartCount = 0 }) => {
             <span></span>
           </button>
 
-          {/* Logo - Thay emoji bằng ảnh thật */}
+          {/* Logo */}
           <Link to="/" className="logo">
             <img
               src={logoImage}
@@ -97,27 +83,28 @@ const Header = ({ cartCount = 0 }) => {
             />
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation with Hover */}
           <nav className="header-nav" role="navigation" aria-label="Primary">
             <Link to="/" className="nav-link">
               Trang Chủ
             </Link>
 
-            {/* Desktop Dropdown Danh mục */}
+            {/* Desktop Dropdown Danh mục - HOVER */}
             <div
-              className={`nav-item has-dropdown ${categoryMenuOpen ? 'open' : ''}`}
+              className={`nav-item has-dropdown ${categoryHoverOpen ? 'open' : ''}`}
               ref={categoryRef}
+              onMouseEnter={() => setCategoryHoverOpen(true)}
+              onMouseLeave={() => setCategoryHoverOpen(false)}
             >
               <button
                 className="nav-link dropdown-toggle"
-                aria-expanded={categoryMenuOpen}
-                onClick={() => setCategoryMenuOpen(prev => !prev)}
+                aria-expanded={categoryHoverOpen}
               >
                 Danh Mục Hoa
                 <span className="arrow">▾</span>
               </button>
 
-              <ul className={`dropdown-menu ${categoryMenuOpen ? 'open' : ''}`}>
+              <ul className={`dropdown-menu ${categoryHoverOpen ? 'open' : ''}`}>
                 <li>
                   <Link to="/category/khai-truong" className="dropdown-link">
                     Hoa Khai Trương
@@ -136,21 +123,23 @@ const Header = ({ cartCount = 0 }) => {
               </ul>
             </div>
 
+            {/* Desktop Admin Dropdown - HOVER */}
             {isAdmin && (
               <div
-                className={`nav-item has-dropdown ${submenuOpen ? 'open' : ''}`}
-                ref={dropdownRef}
+                className={`nav-item has-dropdown ${adminHoverOpen ? 'open' : ''}`}
+                ref={adminRef}
+                onMouseEnter={() => setAdminHoverOpen(true)}
+                onMouseLeave={() => setAdminHoverOpen(false)}
               >
                 <button
                   className="nav-link dropdown-toggle"
-                  aria-expanded={submenuOpen}
-                  onClick={() => setSubmenuOpen(prev => !prev)}
+                  aria-expanded={adminHoverOpen}
                 >
                   Quản Trị
                   <span className="arrow">▾</span>
                 </button>
 
-                <ul className={`dropdown-menu ${submenuOpen ? 'open' : ''}`}>
+                <ul className={`dropdown-menu ${adminHoverOpen ? 'open' : ''}`}>
                   <li>
                     <Link to="/admin/import" className="dropdown-link">
                       Import sản phẩm
@@ -190,17 +179,15 @@ const Header = ({ cartCount = 0 }) => {
         onClick={() => setMenuOpen(false)}
       />
 
-      {/* Mobile Sidebar */}
+      {/* Mobile Sidebar - CLICK */}
       <aside className={`sidebar-menu ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
         <div className="sidebar-header">
-          {/* Logo trong sidebar */}
           <div className="sidebar-logo-wrapper">
             <img
               src={logoImage}
               alt="Hoàng Anh Logo"
               className="sidebar-logo-image"
             />
-            <span className="sidebar-logo">Hoàng Anh</span>
           </div>
           <button
             className="close-btn"
@@ -212,7 +199,6 @@ const Header = ({ cartCount = 0 }) => {
         </div>
 
         <nav className="sidebar-nav" aria-label="Mobile">
-          {/* Trang Chủ */}
           <Link
             to="/"
             className="sidebar-link"
@@ -221,7 +207,7 @@ const Header = ({ cartCount = 0 }) => {
             Trang Chủ
           </Link>
 
-          {/* Mobile Danh Mục Dropdown */}
+          {/* Mobile Danh Mục Dropdown - CLICK */}
           <div className="sidebar-section">
             <button
               className="sidebar-link sidebar-dropdown-toggle"
@@ -265,7 +251,7 @@ const Header = ({ cartCount = 0 }) => {
             )}
           </div>
 
-          {/* Mobile Admin Dropdown */}
+          {/* Mobile Admin Dropdown - CLICK */}
           {isAdmin && (
             <div className="sidebar-section">
               <button
@@ -313,7 +299,6 @@ const Header = ({ cartCount = 0 }) => {
             </div>
           )}
 
-          {/* Liên Hệ */}
           <Link
             to="/contact"
             className="sidebar-link"

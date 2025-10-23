@@ -144,7 +144,7 @@ router.get('/home', async (req, res) => {
       // Chỉ thêm vào result nếu có sản phẩm
       if (products.length > 0) {
         result[slug] = {
-          label: categoryName,
+          label: categoryName.toUpperCase(),
           products
         };
       }

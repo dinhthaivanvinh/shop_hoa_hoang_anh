@@ -10,10 +10,24 @@
 }
 
 .section-title {
-  color: #e91e63;
+  /* color: #e91e63;
   font-size: 20px;
   margin: 0;
-  flex: 1 1 auto;
+  flex: 1 1 auto; */
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+.section-title b {
+  background: linear-gradient(90deg, #D291BC, #C076A8);
+  display: block;
+  flex: 1;
+  height: 2px;
+  opacity: .1;
 }
 
 .view-more-button {

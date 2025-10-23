@@ -1,6 +1,6 @@
 // src/pages/Home.jsx
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ProductGrid from '../components/ProductGrid';
 import SectionHeader from '../components/SectionHeader';
 import HeroSlider from '../components/HeroSlider';
@@ -11,6 +11,9 @@ import '../style/Home.css';
 import khaiTruongHd from '../assets/hd/khai-truong-hd.jpg';
 import sinhNhatHd from '../assets/hd/sinh-nhat-hd.jpg';
 import tangLeHd from '../assets/hd/tang-le-hd.jpg';
+
+// Định nghĩa thứ tự hiển thị cố định
+const CATEGORY_ORDER = ['khai-truong', 'sinh-nhat', 'tang-le'];
 
 const Home = ({ addToCart }) => {
   const { filters, setFilters } = useFilter();
@@ -23,19 +26,13 @@ const Home = ({ addToCart }) => {
 
   // Reset filters when navigating to Home page
   useEffect(() => {
-    // Reset filters
     setFilters({ searchText: '', minPrice: null, maxPrice: null });
-
-    // Toggle reset signal to trigger FilterBar reset
     setResetSignal(prev => !prev);
-
-    // Scroll to top
     window.scrollTo(0, 0);
   }, [location.pathname, setFilters]);
 
   // Fetch products từ API với filters
   useEffect(() => {
-    // Skip initial mount để không call API 2 lần
     if (isInitialMount.current) {
       isInitialMount.current = false;
       setLoading(true);
@@ -71,6 +68,18 @@ const Home = ({ addToCart }) => {
     setFilters({ searchText, minPrice, maxPrice });
   }, [setFilters]);
 
+  // Sắp xếp categories theo thứ tự cố định
+  const getSortedCategories = () => {
+    return CATEGORY_ORDER
+      .map(slug => {
+        if (productData[slug]) {
+          return { slug, ...productData[slug] };
+        }
+        return null;
+      })
+      .filter(Boolean); // Loại bỏ null
+  };
+
   // Chỉ show loading lần đầu
   if (loading && isInitialMount.current) {
     return (
@@ -93,7 +102,8 @@ const Home = ({ addToCart }) => {
     );
   }
 
-  const hasResults = Object.keys(productData).length > 0;
+  const sortedCategories = getSortedCategories();
+  const hasResults = sortedCategories.length > 0;
 
   return (
     <div className="home">
@@ -130,7 +140,7 @@ const Home = ({ addToCart }) => {
         </div>
       </div>
 
-      {/* Products by Category */}
+      {/* Products by Category - THỨ TỰ CỐ ĐỊNH */}
       <div className="container">
         {loading && !isInitialMount.current ? (
           <div className="loading-inline">
@@ -144,11 +154,12 @@ const Home = ({ addToCart }) => {
             <p>Vui lòng thử tìm kiếm với từ khóa khác hoặc điều chỉnh bộ lọc</p>
           </div>
         ) : (
-              Object.entries(productData).map(([slug, { label, products }]) => (
-            <section key={slug} className="category-section">
-                  <SectionHeader title={`${label}`} link={`/category/${slug}`} />
-              <ProductGrid products={products} addToCart={addToCart} />
-            </section>
+              sortedCategories.map(({ slug, label, products }) => (
+                <section key={slug} className="category-section">
+                  <SectionHeader title={label} link={`/category/${slug}`} />
+                  <ProductGrid products={products} addToCart={addToCart} />
+                  <Link to={`/category/${slug}`} className="view-more-button">Xem thêm →</Link>
+                </section>
           ))
         )}
       </div>

@@ -330,7 +330,7 @@
   position: relative;
 }
 
-.section-title::after {
+/* .section-title::after {
   content: '';
   display: block;
   width: 80px;
@@ -338,7 +338,7 @@
   background: linear-gradient(90deg, #D291BC, #C076A8);
   margin: 16px auto 0;
   border-radius: 2px;
-}
+} */
 
 .benefits-grid {
   display: grid;

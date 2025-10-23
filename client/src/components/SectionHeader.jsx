@@ -6,8 +6,11 @@ import '../style/SectionHeader.css'; // ✅ import CSS thuần
 const SectionHeader = ({ title, link }) => {
   return (
     <div className="section-header">
-      <h2 className="section-title">{title}</h2>
-      <Link to={link} className="view-more-button">Xem thêm →</Link>
+      <h2 className="section-title">
+        <b aria-hidden="true"></b>
+        TOP MẪU HOA {title} MỚI NHẤT
+        <b aria-hidden="true"></b>
+      </h2>
     </div>
   );
 };
