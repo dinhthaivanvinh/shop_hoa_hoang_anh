@@ -8,6 +8,9 @@ import FilterBar from '../components/FilterBar';
 import axiosClient from '../utils/axiosClient';
 import { useFilter } from '../context/FilterContext';
 import '../style/Home.css';
+import khaiTruongHd from '../assets/hd/khai-truong-hd.jpg';
+import sinhNhatHd from '../assets/hd/sinh-nhat-hd.jpg';
+import tangLeHd from '../assets/hd/tang-le-hd.jpg';
 
 const Home = ({ addToCart }) => {
   const { filters, setFilters } = useFilter();
@@ -102,19 +105,13 @@ const Home = ({ addToCart }) => {
         <div className="container">
           <div className="quick-category-grid">
             <a href="/category/khai-truong" className="quick-category-card">
-              <div className="quick-category-icon">🎉</div>
-              <h3>Hoa Khai Trương</h3>
-              <p>Chúc mừng thành công</p>
+              <img src={khaiTruongHd} alt='Khai Trương' className="quick-category-card-image" />
             </a>
             <a href="/category/sinh-nhat" className="quick-category-card">
-              <div className="quick-category-icon">🎂</div>
-              <h3>Hoa Sinh Nhật</h3>
-              <p>Chúc mừng ngày đặc biệt</p>
+              <img src={sinhNhatHd} alt='Sinh Nhật' className="quick-category-card-image" />
             </a>
             <a href="/category/tang-le" className="quick-category-card">
-              <div className="quick-category-icon">🕯️</div>
-              <h3>Hoa Tang Lễ</h3>
-              <p>Thành kính viếng tiễn</p>
+              <img src={tangLeHd} alt='Tang Lễ' className="quick-category-card-image" />
             </a>
           </div>
         </div>

@@ -204,9 +204,9 @@
    ============================================ */
 
 .quick-categories {
-  padding: 48px 0;
+  padding: 15px 0;
   background-color: #fff;
-  margin-bottom: 48px;
+  margin-bottom: 15px;
 }
 
 .quick-category-grid {
@@ -219,10 +219,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 24px;
+  padding: 4px 4px;
   background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
   border: 2px solid transparent;
-  border-radius: 16px;
+  border-radius: 10px;
   text-decoration: none;
   transition: all 0.3s;
   cursor: pointer;
@@ -232,6 +232,13 @@
   border-color: #D291BC;
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(210, 145, 188, 0.2);
+}
+
+.quick-category-card-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
 }
 
 .quick-category-icon {
@@ -406,8 +413,8 @@
   }
 
   .quick-categories {
-    padding: 32px 0;
-    margin-bottom: 32px;
+    padding: 15px 0;
+    margin-bottom: 15px;
   }
 
   .quick-category-grid {
