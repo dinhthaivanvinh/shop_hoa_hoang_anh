@@ -275,7 +275,7 @@
 .cart-item-total {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #ec4899;
+  color: black;
   min-width: 120px;
   text-align: right;
 }
@@ -299,10 +299,7 @@
 }
 
 .remove-icon {
-  font-size: 1.5rem;
-  color: #ef4444;
-  font-weight: 400;
-  line-height: 1;
+  width: 20px;
 }
 
 .cart-item-remove:hover .remove-icon {
@@ -406,7 +403,7 @@
 
 .total-price {
   font-size: 1.5rem;
-  color: #ec4899;
+  color: black;
 }
 
 .checkout-btn {
@@ -520,7 +517,7 @@
   .mobile-price {
     font-size: 1rem;
     font-weight: 700;
-    color: #ec4899;
+    color: black;
   }
 
   .cart-actions {

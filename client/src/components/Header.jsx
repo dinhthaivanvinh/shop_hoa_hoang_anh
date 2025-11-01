@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext';
 import '../style/Header.css';
 import logoImage from '../assets/logo.png';
+import shoppingCartIcon from '../assets/icon/shopping_cart_icon.svg';
 
 const Header = ({ cartCount = 0 }) => {
   const { isAdmin, setIsAdmin } = useContext(AdminContext);
@@ -166,7 +167,7 @@ const Header = ({ cartCount = 0 }) => {
 
           {/* Cart */}
           <Link to="/cart" className="cart-btn">
-            <span className="cart-icon">🛒</span>
+            <img className='cart-btn-icon' src={shoppingCartIcon} alt="" />
             <span className="cart-text">Giỏ hàng</span>
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </Link>

@@ -169,7 +169,7 @@
 .product-price {
   font-size: 1rem;
   font-weight: 700;
-  color: #D291BC;
+  color: #000;
   line-height: 1;
 }
 
@@ -372,7 +372,7 @@
   }
 
   .product-price {
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
 
   .add-to-cart-btn {
@@ -400,7 +400,7 @@
   }
 
   .product-price {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .add-to-cart-btn {
@@ -437,7 +437,7 @@
   }
 
   .product-price {
-    font-size: 1.15rem;
+    font-size: 1rem;
   }
 
   .add-to-cart-btn {
@@ -475,7 +475,7 @@
   }
 
   .product-price {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .add-to-cart-btn {
@@ -512,7 +512,7 @@
   }
 
   .product-price {
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
 
   .add-to-cart-btn {

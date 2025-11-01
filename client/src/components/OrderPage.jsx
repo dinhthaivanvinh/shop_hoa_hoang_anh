@@ -105,11 +105,9 @@ const OrderPage = ({ cartItems, clearCart }) => {
               {/* Features */}
               <div className="order-features">
                 <div className="feature-item">
-                  <span className="feature-icon">🚚</span>
                   <span>Giao hàng nhanh 2-4 giờ</span>
                 </div>
                 <div className="feature-item">
-                  <span className="feature-icon">💯</span>
                   <span>Cam kết hoa tươi 100%</span>
                 </div>
               </div>

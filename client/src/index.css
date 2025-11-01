@@ -174,10 +174,10 @@ a {
   text-decoration: none;
   transition: color var(--transition-base);
 }
-
+/* 
 a:hover {
   color: var(--color-primary-dark);
-}
+} */
 
 strong, b {
   font-weight: var(--font-weight-bold);

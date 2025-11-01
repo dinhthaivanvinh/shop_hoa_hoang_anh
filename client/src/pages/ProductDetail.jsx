@@ -202,7 +202,7 @@ const ProductDetail = ({ addToCart }) => {
                   </>
                 ) : (
                   <>
-                    <span className="btn-icon">🛒</span>
+                      {/* <span className="btn-icon">🛒</span> */}
                     <span>Thêm vào giỏ hàng</span>
                   </>
                 )}
@@ -215,7 +215,7 @@ const ProductDetail = ({ addToCart }) => {
                 <span className="contact-icon">📞</span>
                 <div className="contact-details">
                   <span className="contact-label">Hotline</span>
-                  <a href="tel:0123456789" className="contact-value">0123 456 789</a>
+                  <a href="tel:0378776399" className="contact-value">0378 776 399</a>
                 </div>
               </div>
             </div>

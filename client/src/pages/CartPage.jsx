@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../style/CartPage.css';
+import xIcon from '../assets/icon/x_icon.svg'
 
 const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
     <div className="cart-page">
       <div className="cart-container">
         {/* Page Header */}
-        <div className="cart-page-header">
+        {/* <div className="cart-page-header">
           <h1 className="cart-title">
             <span className="cart-icon">🛒</span>
             Giỏ Hàng Của Bạn
@@ -41,7 +42,7 @@ const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
               ? `Bạn có ${cartItems.length} sản phẩm trong giỏ hàng`
               : 'Giỏ hàng đang trống'}
           </p>
-        </div>
+        </div> */}
 
         {cartItems.length === 0 ? (
           /* Empty Cart */
@@ -80,7 +81,6 @@ const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
                 {/* Clear Cart Button */}
                 <div className="cart-actions">
                   <button className="clear-cart-btn" onClick={clearCart}>
-                    <span className="btn-icon">🗑️</span>
                     Xóa tất cả
                   </button>
                   <button className="continue-shopping-link" onClick={handleContinueShopping}>
@@ -112,17 +112,14 @@ const CartPage = ({ cartItems, updateQuantity, removeFromCart, clearCart }) => {
                   </div>
 
                   <button className="checkout-btn" onClick={handleOrder}>
-                    <span className="btn-icon">✓</span>
                     Đặt Hàng Ngay
                   </button>
 
                   <div className="cart-features">
                     <div className="feature-item">
-                      <span className="feature-icon">🚚</span>
                       <span>Giao hàng nhanh 2-4 giờ</span>
                     </div>
                     <div className="feature-item">
-                      <span className="feature-icon">💯</span>
                       <span>Cam kết hoa tươi 100%</span>
                     </div>
                   </div>
@@ -210,7 +207,9 @@ const CartItem = ({ item, updateQuantity, removeFromCart, formatPrice }) => {
         onClick={() => removeFromCart(item.id)}
         aria-label={`Xóa ${item.name}`}
       >
-        <span className="remove-icon">×</span>
+        <span>
+          <img className="remove-icon" src={xIcon} alt="Xóa" />
+        </span>
       </button>
     </div>
   );

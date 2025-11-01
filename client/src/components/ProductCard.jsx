@@ -23,19 +23,19 @@ const truncateText = (text, maxLength) => {
 };
 
 // Shopping Cart Icon Component
-const CartIcon = () => (
-  <svg
-    className="cart-icon-svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M9 2C9 1.44772 9.44772 1 10 1H14C14.5523 1 15 1.44772 15 2V3H19C19.5523 3 20 3.44772 20 4V5H21C21.5523 5 22 5.44772 22 6V20C22 21.1046 21.1046 22 20 22H4C2.89543 22 2 21.1046 2 20V6C2 5.44772 2.44772 5 3 5H4V4C4 3.44772 4.44772 3 5 3H9V2ZM9 5H15V4H9V5ZM6 7V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V7H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"
-      fill="currentColor"
-    />
-  </svg>
-);
+// const CartIcon = () => (
+//   <svg
+//     className="cart-icon-svg"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     xmlns="http://www.w3.org/2000/svg"
+//   >
+//     <path
+//       d="M9 2C9 1.44772 9.44772 1 10 1H14C14.5523 1 15 1.44772 15 2V3H19C19.5523 3 20 3.44772 20 4V5H21C21.5523 5 22 5.44772 22 6V20C22 21.1046 21.1046 22 20 22H4C2.89543 22 2 21.1046 2 20V6C2 5.44772 2.44772 5 3 5H4V4C4 3.44772 4.44772 3 5 3H9V2ZM9 5H15V4H9V5ZM6 7V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V7H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"
+//       fill="currentColor"
+//     />
+//   </svg>
+// );
 
 // Checkmark Icon Component
 const CheckmarkIcon = () => (
@@ -175,10 +175,7 @@ const ProductCard = ({ product, addToCart }) => {
               <span className="btn-text">Đã thêm</span>
             </>
           ) : (
-            <>
-              <CartIcon />
               <span className="btn-text">Thêm vào giỏ</span>
-            </>
           )}
         </button>
       </div>

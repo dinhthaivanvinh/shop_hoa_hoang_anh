@@ -4,6 +4,8 @@ import Header from './Header';
 import '../style/Layout.css';
 import ScrollToTopButton from './ScrollToTopButton';
 import logoImage from '../assets/logo.png'; // 👈 Import logo
+import { SocialIcon } from 'react-social-icons'
+import zaloIcon from '../assets/icon/zalo_icon.svg'
 
 const Layout = ({ children, cartCount }) => {
   const currentYear = new Date().getFullYear();
@@ -34,17 +36,11 @@ const Layout = ({ children, cartCount }) => {
                 Chúng tôi cam kết mang đến những bó hoa tươi đẹp nhất cho mọi dịp đặc biệt.
               </p>
               <div className="footer-social">
-                <a href="https://facebook.com" className="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
-                  📘
-                </a>
-                <a href="https://instagram.com" className="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-                  📷
-                </a>
-                <a href="https://zalo.me" className="social-link" aria-label="Zalo" target="_blank" rel="noopener noreferrer">
-                  💬
-                </a>
-                <a href="tel:0123456789" className="social-link" aria-label="Phone" target="_blank" rel="noopener noreferrer">
-                  📞
+                <SocialIcon url="https://facebook.com" />
+                <SocialIcon url="https://instagram.com" />
+                {/* <SocialIcon url={zaloIcon} /> */}
+                <a href='https://zalo.me/aaaaaaaaaaaaaaa'>
+                  <img className='social-link' src={zaloIcon} alt="Zalo" />
                 </a>
               </div>
             </div>
@@ -74,7 +70,7 @@ const Layout = ({ children, cartCount }) => {
               <h3>Liên Hệ</h3>
               <p>
                 <strong>Hotline:</strong><br />
-                <a href="tel:0123456789">0123 456 789</a>
+                <a href="tel:0378776399">0378 776 399</a>
               </p>
               <p>
                 <strong>Email:</strong><br />
