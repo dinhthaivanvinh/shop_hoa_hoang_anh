@@ -340,3 +340,85 @@
     max-height: 600px;
   }
 }
+
+/* Thêm vào cuối file CategoryPage.css */
+
+/* ============================================
+   COLOR PAGE HEADER
+   ============================================ */
+
+.category-header-color {
+  background: linear-gradient(135deg, #ec4899 0%, #d946ef 50%, #8b5cf6 100%);
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-header-color::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300"><circle cx="100" cy="100" r="80" fill="rgba(255,255,255,0.1)"/><circle cx="500" cy="200" r="100" fill="rgba(255,255,255,0.08)"/><circle cx="900" cy="150" r="90" fill="rgba(255,255,255,0.09)"/><circle cx="1100" cy="80" r="70" fill="rgba(255,255,255,0.1)"/></svg>');
+  background-size: cover;
+  opacity: 0.5;
+}
+
+/* ============================================
+   STYLE PAGE HEADER
+   ============================================ */
+
+.category-header-style {
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #ec4899 100%);
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-header-style::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300"><path d="M100,100 L150,50 L200,100 L150,150 Z" fill="rgba(255,255,255,0.1)"/><path d="M500,150 L550,100 L600,150 L550,200 Z" fill="rgba(255,255,255,0.08)"/><path d="M900,100 L950,50 L1000,100 L950,150 Z" fill="rgba(255,255,255,0.09)"/></svg>');
+  background-size: cover;
+  opacity: 0.5;
+}
+
+.category-header-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  padding: 32px;
+}
+
+.category-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.category-description {
+  font-size: 1.125rem;
+  opacity: 0.95;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .category-header-color,
+  .category-header-style {
+    height: 200px;
+  }
+
+  .category-title {
+    font-size: 1.75rem;
+  }
+
+  .category-description {
+    font-size: 1rem;
+  }
+}

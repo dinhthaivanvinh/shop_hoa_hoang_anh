@@ -12,23 +12,57 @@ const Header = ({ cartCount = 0 }) => {
 
   // Desktop hover state
   const [categoryHoverOpen, setCategoryHoverOpen] = useState(false);
+  const [colorHoverOpen, setColorHoverOpen] = useState(false);
+  const [styleHoverOpen, setStyleHoverOpen] = useState(false);
   const [adminHoverOpen, setAdminHoverOpen] = useState(false);
 
   // Mobile click state
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
+  const [mobileColorOpen, setMobileColorOpen] = useState(false);
+  const [mobileStyleOpen, setMobileStyleOpen] = useState(false);
   const [mobileAdminOpen, setMobileAdminOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
   const categoryRef = useRef();
+  const colorRef = useRef();
+  const styleRef = useRef();
   const adminRef = useRef();
+
+  // Danh sách màu sắc
+  const colors = [
+    { id: 1, name: 'Cam', slug: 'cam' },
+    { id: 2, name: 'Đen', slug: 'den' },
+    { id: 3, name: 'Đỏ', slug: 'do' },
+    { id: 4, name: 'Hồng', slug: 'hong' },
+    { id: 5, name: 'Kem', slug: 'kem' },
+    { id: 6, name: 'Tím', slug: 'tim' },
+    { id: 7, name: 'Trắng', slug: 'trang' },
+    { id: 8, name: 'Vàng', slug: 'vang' },
+    { id: 9, name: 'Xanh Lá', slug: 'xanh-la' }
+  ];
+
+  // Danh sách kiểu dáng
+  const styles = [
+    { id: 1, name: 'Bình', slug: 'binh' },
+    { id: 2, name: 'Bó', slug: 'bo' },
+    { id: 3, name: 'Giỏ', slug: 'gio' },
+    { id: 4, name: 'Hoa Cưới', slug: 'hoa-cuoi' },
+    { id: 5, name: 'Hoa Để Bàn', slug: 'hoa-de-ban' },
+    { id: 6, name: 'Hộp Hoa', slug: 'hop-hoa' },
+    { id: 7, name: 'Kệ', slug: 'ke' },
+    { id: 8, name: 'Lẵng', slug: 'lang' }
+  ];
 
   // Close all menus when route changes
   useEffect(() => {
     setMenuOpen(false);
     setCategoryHoverOpen(false);
+    setColorHoverOpen(false);
     setAdminHoverOpen(false);
     setMobileCategoryOpen(false);
+    setMobileColorOpen(false);
+    setMobileStyleOpen(false)
     setMobileAdminOpen(false);
   }, [location.pathname]);
 
@@ -38,8 +72,11 @@ const Header = ({ cartCount = 0 }) => {
       if (e.key === 'Escape') {
         setMenuOpen(false);
         setCategoryHoverOpen(false);
+        setColorHoverOpen(false);
         setAdminHoverOpen(false);
         setMobileCategoryOpen(false);
+        setMobileColorOpen(false);
+        setMobileStyleOpen(false)
         setMobileAdminOpen(false);
       }
     };
@@ -57,6 +94,8 @@ const Header = ({ cartCount = 0 }) => {
   const handleMobileLinkClick = () => {
     setMenuOpen(false);
     setMobileCategoryOpen(false);
+    setMobileColorOpen(false);
+    setMobileStyleOpen(false)
     setMobileAdminOpen(false);
   };
 
@@ -121,6 +160,58 @@ const Header = ({ cartCount = 0 }) => {
                     Hoa Tang Lễ
                   </Link>
                 </li>
+              </ul>
+            </div>
+
+            {/* Desktop Dropdown Màu Sắc - HOVER */}
+            <div
+              className={`nav-item has-dropdown ${colorHoverOpen ? 'open' : ''}`}
+              ref={colorRef}
+              onMouseEnter={() => setColorHoverOpen(true)}
+              onMouseLeave={() => setColorHoverOpen(false)}
+            >
+              <button
+                className="nav-link dropdown-toggle"
+                aria-expanded={colorHoverOpen}
+              >
+                Màu Sắc
+                <span className="arrow">▾</span>
+              </button>
+
+              <ul className={`dropdown-menu ${colorHoverOpen ? 'open' : ''}`}>
+                {colors.map(color => (
+                  <li key={color.id}>
+                    <Link to={`/color/${color.slug}`} className="dropdown-link">
+                      {color.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Desktop Dropdown Kiểu Dáng - HOVER */}
+            <div
+              className={`nav-item has-dropdown ${styleHoverOpen ? 'open' : ''}`}
+              ref={styleRef}
+              onMouseEnter={() => setStyleHoverOpen(true)}
+              onMouseLeave={() => setStyleHoverOpen(false)}
+            >
+              <button
+                className="nav-link dropdown-toggle"
+                aria-expanded={styleHoverOpen}
+              >
+                Kiểu Dáng
+                <span className="arrow">▾</span>
+              </button>
+
+              <ul className={`dropdown-menu ${styleHoverOpen ? 'open' : ''}`}>
+                {styles.map(style => (
+                  <li key={style.id}>
+                    <Link to={`/style/${style.slug}`} className="dropdown-link">
+                      {style.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -248,6 +339,62 @@ const Header = ({ cartCount = 0 }) => {
                     Hoa Tang Lễ
                   </Link>
                 </li>
+              </ul>
+            )}
+          </div>
+
+          {/* Mobile Màu Sắc Dropdown - CLICK */}
+          <div className="sidebar-section">
+            <button
+              className="sidebar-link sidebar-dropdown-toggle"
+              onClick={() => setMobileColorOpen(prev => !prev)}
+              aria-expanded={mobileColorOpen}
+            >
+              Màu Sắc
+              <span className={`arrow ${mobileColorOpen ? 'open' : ''}`}>▾</span>
+            </button>
+
+            {mobileColorOpen && (
+              <ul className="sidebar-dropdown">
+                {colors.map(color => (
+                  <li key={color.id}>
+                    <Link
+                      to={`/color/${color.slug}`}
+                      className="sidebar-sublink"
+                      onClick={handleMobileLinkClick}
+                    >
+                      {color.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Mobile Kiểu Dáng Dropdown - CLICK */}
+          <div className="sidebar-section">
+            <button
+              className="sidebar-link sidebar-dropdown-toggle"
+              onClick={() => setMobileStyleOpen(prev => !prev)}
+              aria-expanded={mobileStyleOpen}
+            >
+              Kiểu Dáng
+              <span className={`arrow ${mobileStyleOpen ? 'open' : ''}`}>▾</span>
+            </button>
+
+            {mobileStyleOpen && (
+              <ul className="sidebar-dropdown">
+                {styles.map(stle => (
+                  <li key={stle.id}>
+                    <Link
+                      to={`/style/${stle.slug}`}
+                      className="sidebar-sublink"
+                      onClick={handleMobileLinkClick}
+                    >
+                      {stle.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </div>

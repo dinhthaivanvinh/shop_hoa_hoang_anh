@@ -1,7 +1,6 @@
-// src/pages/CategoryPage.jsx
+// src/pages/FilterPage.jsx - Component chung cho Color và Style
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { CategoryTitle } from '../data/category';
 import ProductGrid from '../components/ProductGrid';
 import Pagination from '../components/Pagination';
 import FilterBar from '../components/FilterBar';
@@ -9,17 +8,32 @@ import axiosClient from '../utils/axiosClient';
 import { useFilter } from '../context/FilterContext';
 import '../style/CategoryPage.css';
 
-// Import banner images - DESKTOP (4500x1125 - 4:1 ratio)
-import bannerKhaiTruongDesktop from '../assets/banners/khai-truong-banner.jpg';
-import bannerSinhNhatDesktop from '../assets/banners/sinh-nhat-banner.jpg';
-import bannerTangLeDesktop from '../assets/banners/tang-le-banner.jpg';
+// Map cho Colors
+const COLOR_MAP = {
+  'cam': { id: 1, name: 'Cam', displayName: 'Hoa Màu Cam' },
+  'den': { id: 2, name: 'Đen', displayName: 'Hoa Màu Đen' },
+  'do': { id: 3, name: 'Đỏ', displayName: 'Hoa Màu Đỏ' },
+  'hong': { id: 4, name: 'Hồng', displayName: 'Hoa Màu Hồng' },
+  'kem': { id: 5, name: 'Kem', displayName: 'Hoa Màu Kem' },
+  'tim': { id: 6, name: 'Tím', displayName: 'Hoa Màu Tím' },
+  'trang': { id: 7, name: 'Trắng', displayName: 'Hoa Màu Trắng' },
+  'vang': { id: 8, name: 'Vàng', displayName: 'Hoa Màu Vàng' },
+  'xanh-la': { id: 9, name: 'Xanh Lá', displayName: 'Hoa Màu Xanh Lá' }
+};
 
-// Import banner images - MOBILE
-import bannerKhaiTruongMobile from '../assets/banners/khai-truong-banner-mb.jpg';
-import bannerSinhNhatMobile from '../assets/banners/sinh-nhat-banner-mb.jpg';
-import bannerTangLeMobile from '../assets/banners/tang-le-banner-mb.jpg';
+// Map cho Styles
+const STYLE_MAP = {
+  'binh': { id: 1, name: 'Bình', displayName: 'Hoa Bình' },
+  'bo': { id: 2, name: 'Bó', displayName: 'Hoa Bó' },
+  'gio': { id: 3, name: 'Giỏ', displayName: 'Hoa Giỏ' },
+  'hoa-cuoi': { id: 4, name: 'Hoa Cưới', displayName: 'Hoa Cưới' },
+  'hoa-de-ban': { id: 5, name: 'Hoa Để Bàn', displayName: 'Hoa Để Bàn' },
+  'hop-hoa': { id: 6, name: 'Hộp Hoa', displayName: 'Hộp Hoa' },
+  'ke': { id: 7, name: 'Kệ', displayName: 'Hoa Kệ' },
+  'lang': { id: 8, name: 'Lẵng', displayName: 'Hoa Lẵng' }
+};
 
-// Helper function to convert filters to price range string
+// Helper function
 const getPriceRangeValue = (minPrice, maxPrice) => {
   if (!minPrice && !maxPrice) return '';
   if (!minPrice && maxPrice === 500000) return 'under500';
@@ -29,58 +43,36 @@ const getPriceRangeValue = (minPrice, maxPrice) => {
   return '';
 };
 
-const CategoryPage = ({ addToCart }) => {
-  const { categorySlug } = useParams();
+const FilterPage = ({ addToCart, filterType }) => {
+  const params = useParams();
   const { filters, setFilters } = useFilter();
 
-  const categoryTitleMap = {
-    'sinh-nhat': CategoryTitle.SinhNhat,
-    'khai-truong': CategoryTitle.KhaiTruong,
-    'tang-le': CategoryTitle.TangLe
-  };
-
-  // Banner maps for DESKTOP
-  const categoryBannerDesktopMap = {
-    'sinh-nhat': bannerSinhNhatDesktop,
-    'khai-truong': bannerKhaiTruongDesktop,
-    'tang-le': bannerTangLeDesktop
-  };
-
-  // Banner maps for MOBILE
-  const categoryBannerMobileMap = {
-    'sinh-nhat': bannerSinhNhatMobile,
-    'khai-truong': bannerKhaiTruongMobile,
-    'tang-le': bannerTangLeMobile
-  };
-
-  const selectedCategoryTitle = categoryTitleMap[categorySlug];
-  const bannerDesktop = categoryBannerDesktopMap[categorySlug];
-  const bannerMobile = categoryBannerMobileMap[categorySlug];
-  const title = selectedCategoryTitle.replace(/([A-Z])/g, ' $1').trim();
+  // Lấy slug từ params dựa trên filterType
+  const slug = filterType === 'color' ? params.colorSlug : params.styleSlug;
+  
+  // Chọn map phù hợp
+  const dataMap = filterType === 'color' ? COLOR_MAP : STYLE_MAP;
+  const filterInfo = dataMap[slug];
+  
+  const title = filterInfo?.displayName || 'Hoa';
+  const filterParam = filterType === 'color' ? 'color' : 'style';
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [imageError, setImageError] = useState(false);
   const [resetSignal, setResetSignal] = useState(false);
   const isInitialMount = useRef(true);
 
-  // Reset filters khi đổi category
+  // Reset filters khi đổi filter
   useEffect(() => {
-    console.log('🔄 Category changed:', categorySlug);
-    setImageError(false);
+    console.log(`🔄 ${filterType} changed:`, slug);
 
-    // Reset filters
     setFilters({ searchText: '', minPrice: null, maxPrice: null });
-
-    // Toggle reset signal to trigger FilterBar reset
     setResetSignal(prev => !prev);
-
-    // Scroll to top
     window.scrollTo(0, 0);
-  }, [categorySlug, setFilters]);
+  }, [slug, setFilters, filterType]);
 
   // Reset page khi filters change
   useEffect(() => {
@@ -89,6 +81,12 @@ const CategoryPage = ({ addToCart }) => {
 
   // Fetch products
   useEffect(() => {
+    if (!filterInfo) {
+      setError(`${filterType === 'color' ? 'Màu sắc' : 'Kiểu dáng'} không hợp lệ`);
+      setLoading(false);
+      return;
+    }
+
     if (isInitialMount.current) {
       isInitialMount.current = false;
     }
@@ -97,41 +95,41 @@ const CategoryPage = ({ addToCart }) => {
     setError(null);
 
     const query = new URLSearchParams();
-    query.append('type', categorySlug);
+    query.append(filterParam, filterInfo.id);
     query.append('page', page);
     if (filters.searchText) query.append('name', filters.searchText);
     if (filters.minPrice) query.append('minPrice', filters.minPrice);
     if (filters.maxPrice) query.append('maxPrice', filters.maxPrice);
 
-    console.log('📡 Fetching products with:', {
-      categorySlug,
+    console.log(`📡 Fetching products with ${filterType}:`, {
+      slug,
+      id: filterInfo.id,
       page,
       filters,
       queryString: query.toString()
     });
 
     axiosClient
-      .get(`/api/products/category?${query.toString()}`)
+      .get(`/api/products/filter?${query.toString()}`)
       .then(res => {
         console.log('✅ Products received:', res.data);
-
-        // Support cả format cũ và mới
+        
         const productsData = res.data.products || [];
         const paginationData = res.data.pagination || res.data;
-
+        
         setProducts(productsData);
         setTotalPages(paginationData.totalPages || 1);
         setLoading(false);
       })
       .catch(err => {
-        console.error('❌ Lỗi khi lấy sản phẩm theo danh mục:', err);
+        console.error(`❌ Lỗi khi lấy sản phẩm theo ${filterType}:`, err);
         setError('Không thể tải sản phẩm. Vui lòng thử lại sau.');
         setLoading(false);
       });
-  }, [page, filters.searchText, filters.minPrice, filters.maxPrice, categorySlug]);
+  }, [page, filters.searchText, filters.minPrice, filters.maxPrice, slug, filterInfo, filterParam, filterType]);
 
   const handleFilterChange = useCallback(({ searchText, minPrice, maxPrice }) => {
-    console.log('🔍 CategoryPage handleFilterChange:', { searchText, minPrice, maxPrice });
+    console.log(`🔍 FilterPage handleFilterChange:`, { searchText, minPrice, maxPrice });
     setFilters({ searchText, minPrice, maxPrice });
   }, [setFilters]);
 
@@ -165,31 +163,22 @@ const CategoryPage = ({ addToCart }) => {
     );
   }
 
-  // Get current price range value for FilterBar
   const currentPriceRange = getPriceRangeValue(filters.minPrice, filters.maxPrice);
 
   return (
     <div className="category-page">
-      {/* Category Header with Responsive Banner */}
-      <div className={`category-header category-header-${categorySlug}`}>
-        {/* Picture element for responsive images */}
-        <picture className="category-banner-picture">
-          {/* Mobile banner (≤768px) */}
-          <source
-            media="(max-width: 768px)"
-            srcSet={bannerMobile}
-          />
-          {/* Desktop banner (>768px) */}
-          <img
-            src={bannerDesktop}
-            alt={`${title} banner`}
-            className="category-banner-image"
-            onError={() => setImageError(true)}
-          />
-        </picture>
-
-        {/* Overlay */}
+      {/* Header */}
+      <div className={`category-header category-header-${filterType}`}>
         <div className="category-header-overlay"></div>
+        <div className="category-header-content">
+          <h1 className="category-title">{title}</h1>
+          <p className="category-description">
+            {filterType === 'color' 
+              ? `Khám phá bộ sưu tập hoa ${filterInfo?.name.toLowerCase()} đẹp nhất`
+              : `Khám phá bộ sưu tập ${filterInfo?.name.toLowerCase()} độc đáo`
+            }
+          </p>
+        </div>
       </div>
 
       {/* Filter Bar */}
@@ -197,7 +186,7 @@ const CategoryPage = ({ addToCart }) => {
         <div className="container">
           <div className="category-filter-section">
             <FilterBar
-              key={`filter-${categorySlug}-${resetSignal}`}
+              key={`filter-${slug}-${resetSignal}`}
               onFilterChange={handleFilterChange}
               initialSearch={filters.searchText || ''}
               initialPrice={currentPriceRange}
@@ -212,31 +201,25 @@ const CategoryPage = ({ addToCart }) => {
               <p>Đang tìm kiếm...</p>
             </div>
           ) : products.length === 0 ? (
-              /* No Products */
             <div className="no-products">
               <div className="no-products-icon">🔍</div>
               <h3>Không tìm thấy sản phẩm</h3>
               <p>Vui lòng thử tìm kiếm với từ khóa khác hoặc điều chỉnh bộ lọc</p>
             </div>
           ) : (
-                /* Products Grid */
-                <>
-                  <ProductGrid
-                    products={products}
-                    addToCart={addToCart}
-                  />
+            <>
+              <ProductGrid products={products} addToCart={addToCart} />
 
-                  {/* Pagination - Hiển thị khi có nhiều hơn 1 trang */}
-                  {totalPages > 1 && (
-                    <div className="pagination-wrapper">
-                      <Pagination
-                        currentPage={page}
-                        totalPages={totalPages}
-                        onPageChange={handlePageChange}
-                      />
-                    </div>
-                  )}
-                </>
+              {totalPages > 1 && (
+                <div className="pagination-wrapper">
+                  <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -244,4 +227,4 @@ const CategoryPage = ({ addToCart }) => {
   );
 };
 
-export default CategoryPage;
+export default FilterPage;

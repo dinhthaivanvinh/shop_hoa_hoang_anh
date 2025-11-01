@@ -170,24 +170,20 @@ const Home = ({ addToCart }) => {
           <h2 className="section-title">Tại Sao Chọn Chúng Tôi?</h2>
           <div className="benefits-grid">
             <div className="benefit-card">
-              <div className="benefit-icon">🌺</div>
               <h3>Hoa Tươi Chất Lượng</h3>
-              <p>Nhập khẩu trực tiếp từ các vườn hoa uy tín</p>
+              <p>Chúng tôi sử dụng 100% hoa tươi tự nhiên để tạo ra những mẫu hoa đẹp nhất. Dịch vụ của shop hoa tươi Hoàng Anh nhận bó hoa, cắm hoa theo yêu cầu của khách hàng.</p>
             </div>
             <div className="benefit-card">
-              <div className="benefit-icon">👨‍🎨</div>
-              <h3>Thiết Kế Chuyên Nghiệp</h3>
-              <p>Đội ngũ florist giàu kinh nghiệm</p>
+              <h3>Đội ngũ Chuyên Nghiệp</h3>
+              <p>Shop hoa Hoàng Anh rất hạnh phúc khi có đội ngũ thợ cắm hoa tay nghề cao, nhân viên tư vấn nhiệt tình, sáng tạo và có những tác phẩm nghệ thuật cắm hoa đặc sắc, ấn tượng và độc đáo.</p>
             </div>
             <div className="benefit-card">
-              <div className="benefit-icon">⚡</div>
               <h3>Giao Hàng Nhanh Chóng</h3>
               <p>Giao trong vòng 2 giờ nội thành</p>
             </div>
             <div className="benefit-card">
-              <div className="benefit-icon">💯</div>
-              <h3>Cam Kết Hoàn Tiền</h3>
-              <p>100% hoàn tiền nếu không hài lòng</p>
+              <h3>Mức Giá Phù Hợp</h3>
+              <p>Vì nhập hoa có nguồn ổn định nên hoa tươi & mới, nhập về mỗi ngày. Cam kết hoa tươi trên 3 ngày, bán hoa với mức giá phù hợp trong các dịp lễ, tết.</p>
             </div>
           </div>
         </div>

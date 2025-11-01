@@ -183,7 +183,127 @@ router.get('/filters', async (req, res) => {
   }
 });
 
+// routes/products.js - Thêm endpoint mới cho filter tổng hợp
 
+// API filter tổng quát (không bắt buộc category)
+router.get('/filter', async (req, res) => {
+  try {
+    const {
+      name,           // tên sản phẩm
+      minPrice,
+      maxPrice,
+      color,          // color ID hoặc array of IDs
+      style,          // style ID hoặc array of IDs
+      category,       // category ID (optional)
+      page = 1,
+      limit = 15
+    } = req.query;
+
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+
+    // Xây dựng điều kiện lọc động
+    let where = 'WHERE 1=1';
+    const params = [];
+
+    // Filter theo category (optional)
+    if (category) {
+      where += ' AND p.category_id = ?';
+      params.push(Number(category));
+    }
+
+    // Filter theo tên sản phẩm
+    if (name) {
+      where += ' AND p.name LIKE ?';
+      params.push(`%${name}%`);
+    }
+
+    // Filter theo giá
+    if (minPrice) {
+      where += ' AND p.price >= ?';
+      params.push(Number(minPrice));
+    }
+
+    if (maxPrice) {
+      where += ' AND p.price <= ?';
+      params.push(Number(maxPrice));
+    }
+
+    // Filter theo màu sắc (hỗ trợ nhiều màu)
+    if (color) {
+      const colors = Array.isArray(color) ? color : [color];
+      const colorPlaceholders = colors.map(() => '?').join(',');
+      where += ` AND p.color_id IN (${colorPlaceholders})`;
+      params.push(...colors.map(Number));
+    }
+
+    // Filter theo style (hỗ trợ nhiều style)
+    if (style) {
+      const styles = Array.isArray(style) ? style : [style];
+      const stylePlaceholders = styles.map(() => '?').join(',');
+      where += ` AND p.style_id IN (${stylePlaceholders})`;
+      params.push(...styles.map(Number));
+    }
+
+    // Đếm tổng số sản phẩm
+    const countSql = `
+      SELECT COUNT(*) as total 
+      FROM products p
+      ${where}
+    `;
+    const [countRows] = await db.execute(countSql, params);
+    const total = countRows[0].total;
+    const totalPages = Math.ceil(total / parseInt(limit));
+
+    // Lấy sản phẩm với thông tin đầy đủ
+    const sql = `
+      SELECT 
+        p.id, 
+        p.name, 
+        p.price, 
+        p.image,
+        p.description,
+        c.name as color_name,
+        s.name as style_name,
+        cat.name as category_name
+      FROM products p
+      LEFT JOIN colors c ON p.color_id = c.id
+      LEFT JOIN styles s ON p.style_id = s.id
+      LEFT JOIN categories cat ON p.category_id = cat.id
+      ${where}
+      ORDER BY p.created_at DESC
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+
+    // Thêm limit và offset vào params array
+    const [products] = await db.execute(sql, params);
+
+    // Format response
+    const formatted = products.map(p => ({
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      image: p.image,
+      description: p.description,
+      color: p.color_name,
+      style: p.style_name,
+      category: p.category_name
+    }));
+
+    res.json({
+      products: formatted,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        totalPages
+      }
+    });
+
+  } catch (err) {
+    console.error('🔥 Lỗi GET /filter:', err);
+    res.status(500).json({ error: 'Lỗi server khi lọc sản phẩm' });
+  }
+});
 
 // routes/products.js (đoạn import CSV) - sử dụng preloadMasters
 const { preloadMasters, normalizeName } = require('../helpers/masterLookup');
@@ -282,20 +402,35 @@ router.post('/import', upload.single('file'), async (req, res) => {
   }
 });
 
+// routes/products.js
 router.get('/category', async (req, res) => {
   try {
-    const { type, name, minPrice, maxPrice } = req.query;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
-    const offset = (page - 1) * limit;
+    const {
+      type,           // category slug
+      name,           // tên sản phẩm
+      minPrice,
+      maxPrice,
+      color,          // color ID hoặc array of IDs
+      style,          // style ID hoặc array of IDs
+      page = 1,
+      limit = 15
+    } = req.query;
 
-    if (!type) return res.status(400).json({ error: 'Thiếu type trong query' });
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+
+    // Validate required params
+    if (!type) {
+      return res.status(400).json({ error: 'Thiếu type trong query' });
+    }
 
     const normalizedType = slugify(type, { lower: true });
 
+    // Lấy category
     const [categories] = await db.execute('SELECT id, name FROM categories');
+    const matched = categories.find(c =>
+      slugify(c.name, { lower: true }) === normalizedType
+    );
 
-    const matched = categories.find(c => slugify(c.name, { lower: true }) === normalizedType);
     if (!matched) {
       console.warn('❌ Không tìm thấy danh mục:', normalizedType);
       return res.status(404).json({ error: 'Không tìm thấy danh mục' });
@@ -303,60 +438,162 @@ router.get('/category', async (req, res) => {
 
     const category_id = matched.id;
 
-    // Xây dựng điều kiện lọc
-    let where = 'WHERE category_id = ?';
+    // Xây dựng điều kiện lọc động
+    let where = 'WHERE p.category_id = ?';
     const params = [category_id];
 
+    // Filter theo tên sản phẩm
     if (name) {
-      where += ' AND name LIKE ?';
+      where += ' AND p.name LIKE ?';
       params.push(`%${name}%`);
     }
 
+    // Filter theo giá
     if (minPrice) {
-      where += ' AND price >= ?';
+      where += ' AND p.price >= ?';
       params.push(Number(minPrice));
     }
 
     if (maxPrice) {
-      where += ' AND price <= ?';
+      where += ' AND p.price <= ?';
       params.push(Number(maxPrice));
     }
 
-    // Đếm tổng số sản phẩm
-    const [countRows] = await db.execute(
-      `SELECT COUNT(*) as total FROM products ${where}`,
-      params
-    );
-    const total = countRows[0].total;
-    const totalPages = Math.ceil(total / limit);
+    // Filter theo màu sắc (hỗ trợ nhiều màu)
+    if (color) {
+      const colors = Array.isArray(color) ? color : [color];
+      const colorPlaceholders = colors.map(() => '?').join(',');
+      where += ` AND p.color_id IN (${colorPlaceholders})`;
+      params.push(...colors.map(Number));
+    }
 
-    // Lấy sản phẩm phân trang
-    const sql = `
-      SELECT id, name, price, image
-      FROM products
+    // Filter theo style (hỗ trợ nhiều style)
+    if (style) {
+      const styles = Array.isArray(style) ? style : [style];
+      const stylePlaceholders = styles.map(() => '?').join(',');
+      where += ` AND p.style_id IN (${stylePlaceholders})`;
+      params.push(...styles.map(Number));
+    }
+
+    // Đếm tổng số sản phẩm
+    const countSql = `
+      SELECT COUNT(*) as total 
+      FROM products p
       ${where}
-      ORDER BY created_at DESC
+    `;
+    const [countRows] = await db.execute(countSql, params);
+    const total = countRows[0].total;
+    const totalPages = Math.ceil(total / parseInt(limit));
+
+    // Lấy sản phẩm với thông tin đầy đủ
+    const sql = `
+      SELECT
+        p.id,
+        p.name,
+        p.price,
+        p.image,
+        p.description,
+        c.name as color_name,
+        s.name as style_name,
+        cat.name as category_name
+      FROM products p
+      LEFT JOIN colors c ON p.color_id = c.id
+      LEFT JOIN styles s ON p.style_id = s.id
+      LEFT JOIN categories cat ON p.category_id = cat.id
+      ${where}
+      ORDER BY p.created_at DESC
       LIMIT ${limit} OFFSET ${offset}
     `;
 
     const [products] = await db.execute(sql, params);
 
-
+    // Format response
     const formatted = products.map(p => ({
       id: p.id,
       name: p.name,
       price: p.price,
-      image: p.image
+      image: p.image,
+      description: p.description,
+      color: p.color_name,
+      style: p.style_name,
+      category: p.category_name
     }));
 
-    res.json({ products: formatted, totalPages });
+    res.json({
+      products: formatted,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        totalPages
+      }
+    });
+
   } catch (err) {
     console.error('🔥 Lỗi GET /category:', err);
-    res.status(500).json({ error: 'Lỗi server khi lấy sản phẩm theo danh mục' });
+    res.status(500).json({ error: 'Lỗi server khi lấy sản phẩm' });
   }
 });
 
-module.exports = router;
+// Thêm endpoint để lấy filter options
+router.get('/filter-options', async (req, res) => {
+  try {
+    const { type } = req.query;
+
+    let categoryFilter = '';
+    const params = [];
+
+    if (type) {
+      const normalizedType = slugify(type, { lower: true });
+      const [categories] = await db.execute('SELECT id FROM categories');
+      const matched = categories.find(c =>
+        slugify(c.name, { lower: true }) === normalizedType
+      );
+
+      if (matched) {
+        categoryFilter = 'WHERE category_id = ?';
+        params.push(matched.id);
+      }
+    }
+
+    // Lấy các màu đang được sử dụng
+    const [colors] = await db.execute(`
+      SELECT DISTINCT c.id, c.name 
+      FROM colors c
+      INNER JOIN products p ON c.id = p.color_id
+      ${categoryFilter}
+      ORDER BY c.name
+    `, params);
+
+    // Lấy các style đang được sử dụng
+    const [styles] = await db.execute(`
+      SELECT DISTINCT s.id, s.name 
+      FROM styles s
+      INNER JOIN products p ON s.id = p.style_id
+      ${categoryFilter}
+      ORDER BY s.name
+    `, params);
+
+    // Lấy range giá
+    const [priceRange] = await db.execute(`
+      SELECT 
+        MIN(price) as minPrice, 
+        MAX(price) as maxPrice 
+      FROM products
+      ${categoryFilter}
+    `, params);
+
+    res.json({
+      colors,
+      styles,
+      priceRange: priceRange[0]
+    });
+
+  } catch (err) {
+    console.error('🔥 Lỗi GET /filter-options:', err);
+    res.status(500).json({ error: 'Lỗi server' });
+  }
+});
 
 
 /**

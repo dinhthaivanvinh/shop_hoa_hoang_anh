@@ -17,6 +17,7 @@ import CsvUploader from './components/CsvUploader';
 import AdminOrders from './pages/AdminOrders';
 import { FilterProvider } from './context/FilterContext';
 import ScrollToTop from './components/ScrollToTop';
+import FilterPage from './pages/FilterPage';
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -76,6 +77,14 @@ function App() {
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/admin-orders" element={<AdminOrders />} />
               <Route path="/admin" element={<AdminHome />} />
+              <Route
+                path="/color/:colorSlug"
+                element={<FilterPage addToCart={addToCart} filterType="color" />}
+              />
+              <Route
+                path="/style/:styleSlug"
+                element={<FilterPage addToCart={addToCart} filterType="style" />}
+              />
             </Routes>
           </Layout>
           <ToastContainer />

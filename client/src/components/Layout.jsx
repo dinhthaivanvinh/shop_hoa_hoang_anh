@@ -38,7 +38,6 @@ const Layout = ({ children, cartCount }) => {
               <div className="footer-social">
                 <SocialIcon url="https://facebook.com" />
                 <SocialIcon url="https://instagram.com" />
-                {/* <SocialIcon url={zaloIcon} /> */}
                 <a href='https://zalo.me/aaaaaaaaaaaaaaa'>
                   <img className='social-link' src={zaloIcon} alt="Zalo" />
                 </a>
